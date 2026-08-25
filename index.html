@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ASSAY — the referee harness</title>
+<meta name="description" content="A referee for agent runs in any world: every action predicted before it is taken, every claim graded in code, every event in a hash-chained journal. Evidence pack №1: ARC-AGI-3, RHAE 96.54, server-confirmed." />
+<meta property="og:title" content="ASSAY — the referee harness" />
+<meta property="og:description" content="The agent proposes, the referee disposes. Verified frontier performance on ARC-AGI-3 at a measured 8% integrity overhead." />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #efece6; }
+  a { color: #2d4f8f; text-decoration: none; border-bottom: 1px solid rgba(45,79,143,0.35); }
+  a:hover { color: #17325f; border-bottom-color: #17325f; }
+  ::selection { background: #dfe4ef; }
+</style>
+</helmet>
+<div style="background: #efece6; color: #1a1815; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-wrap: break-word;">
+
+  <div style="position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: nowrap; padding: 12px clamp(16px,4vw,40px); background: rgba(239,236,230,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid #d8d3ca; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #6d6760;">
+    <div style="display: flex; align-items: center; gap: 12px; flex: 0 1 auto; min-width: 0; overflow: hidden;">
+      <span style="width: 9px; height: 9px; background: #2d4f8f; display: block;"></span>
+      <span style="color: #1a1815; letter-spacing: 0.18em; flex: 0 0 auto;">ASSAY</span>
+      <span style="color: #a9a29a; flex: 0 0 auto;">/</span>
+      <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;">referee harness</span>
+    </div>
+    <div style="display: flex; align-items: center; flex-wrap: nowrap; gap: 22px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex: 0 1 auto; min-width: 0; margin-left: auto; white-space: nowrap;">
+      <a href="#anyworld" style="color: #6d6760; border: 0;">Any world</a>
+      <a href="#evidence" style="color: #6d6760; border: 0;">Evidence</a>
+      <a href="#loop" style="color: #6d6760; border: 0;">How it works</a>
+      <a href="#audit" style="color: #6d6760; border: 0;">Audit it</a>
+      <a href="#findings" style="color: #6d6760; border: 0;">Findings</a>
+      <a href="#about" style="color: #6d6760; border: 0;">Contact</a>
+    </div>
+  </div>
+
+  <!-- ── 01 HERO ───────────────────────────────────────────── -->
+  <section style="max-width: 1180px; margin: 0 auto; padding: clamp(56px,9vw,96px) clamp(20px,4vw,40px) clamp(40px,6vw,64px);">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,420px),1fr)); gap: clamp(40px,5vw,72px); align-items: start;">
+      <div>
+        <div style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #6d6760; margin-bottom: 28px;">A referee for agent runs in any world </div>
+        <h1 style="font-family: Newsreader, Georgia, serif; font-weight: 300; font-size: clamp(32px,7vw,54px); line-height: 1.12; letter-spacing: -0.015em; margin: 0 0 28px; text-wrap: pretty; color: #14120f;">The agent proposes,<br />the referee disposes.</h1>
+        <p style="margin: 0 0 36px; max-width: 46ch; color: #423d37; font-size: 15.5px;">A referee harness for any world: The agent must predict before it acts, code grades every prediction against what actually happened and nothing happens off the record. Performance benchmark: frontier performance on ARC-AGI-3 — with along with its audit trail </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+          <a href="./uploads/preprint.pdf" style="border: 1px solid #1a1815; background: #1a1815; color: #f4f2ee; padding: 13px 22px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;" style-hover="background:#2d4f8f;border-color:#2d4f8f;">Read the paper</a>
+          <a href="#audit" style="border: 1px solid #b8b1a7; color: #1a1815; padding: 13px 22px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; background: transparent;" style-hover="border-color:#1a1815;background:#e6e2da;">Audit a run</a>
+        </div>
+      </div>
+
+      <div style="border: 1px solid #d8d3ca; background: #f7f5f1;">
+        <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 16px 20px; padding: 22px 24px 12px;">
+          <div>
+            <div style="font-family: Newsreader, Georgia, serif; font-size: clamp(48px,10vw,68px); line-height: 1; font-weight: 400; letter-spacing: -0.02em; color: #14120f;">96.54</div>
+            <div style="font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #6d6760; margin-top: 8px;">RHAE on ARC AGI-3</div>
+          </div>
+          <div style="font-size: 12px; color: #6d6760; line-height: 1.9; display: flex; flex-wrap: wrap; gap: 4px 18px; margin-left: auto;">
+            <span>24/25 games</span><span>177/183 levels</span><span>8,157 actions</span>
+          </div>
+        </div>
+        <div style="border-top: 1px solid #e2ded6; padding: 16px 24px; font-size: 12.5px; color: #423d37; display: flex; justify-content: space-between; gap: 16px;">
+          <span>Ungated events</span><span style="color: #2d4f8f;">zero</span>
+        </div>
+        <div style="border-top: 1px solid #e2ded6; padding: 16px 24px; font-size: 12.5px; color: #423d37; display: flex; justify-content: space-between; gap: 16px;">
+          <span>Exploration tax</span><span style="color: #2d4f8f;">8.0%</span>
+        </div>
+        <div style="border-top: 1px solid #e2ded6; padding: 16px 24px; font-size: 12.5px; color: #423d37; display: flex; justify-content: space-between; gap: 16px;">
+          <span>Wins verified</span><span style="color: #2d4f8f;">3 ways, all 24</span>
+        </div>
+        <div style="border-top: 1px solid #d8d3ca; padding: 14px 24px; background: #efece6;">
+          <a href="https://arcprize.org/scorecards/702ccd4f-df1f-4118-bc8b-d79d3f4a1a32" style="font-size: 12px; letter-spacing: 0.04em;">Public scorecard 702ccd4f →</a>
+        </div>
+      </div>
+    </div>
+
+    <figure style="margin: 76px 0 0; border-top: 1px solid #d8d3ca; padding-top: 26px;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; margin-bottom: 12px;">
+        <span>Fig. 1 — the gate</span><span>look → predict → act → grade → record</span>
+      </div>
+      <canvas data-fig="gate" width="1800" height="440" style="display: block; width: 100%; height: auto;"></canvas>
+    </figure>
+  </section>
+
+
+  <!-- ── 01b ANY WORLD ─────────────────────────────────────── -->
+  <section id="anyworld" style="scroll-margin-top: 68px; border-top: 1px solid #d8d3ca; background: #faf9f6;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(40px,6vw,60px) clamp(20px,4vw,40px);">
+      <div style="font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #6d6760; margin-bottom: 24px;">One kernel, any world. What you need to define:</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,260px),1fr)); gap: 14px;">
+        <div style="background: #f7f5f1; padding: 22px;">
+          <div style="font-size: 11.5px; color: #2d4f8f; letter-spacing: 0.1em;">REGISTRY</div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: #423d37;">A JSON determining what the agent may do: names, typed parameters, budgets, gates, the goal.</div>
+        </div>
+        <div style="background: #f7f5f1; padding: 22px;">
+          <div style="font-size: 11.5px; color: #2d4f8f; letter-spacing: 0.1em;">ADAPTER</div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: #423d37;">A Python file plugging Assay into your world.</div>
+        </div>
+      </div>
+      <p style="margin: 24px 0 0; font-size: 14px; color: #423d37; max-width: 72ch;">The same constitution, conditions, budegets, and audit run identically across worlds. ARC-AGI-3 was the first benchmark. Factorio and OOLONG publish next under the identical standard.</p>
+    </div>
+  </section>
+
+  <!-- ── 02 EVIDENCE ───────────────────────────────────────── -->
+  <section id="evidence" style="scroll-margin-top: 68px; border-top: 1px solid #d8d3ca; background: #f4f2ee;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(52px,8vw,80px) clamp(20px,4vw,40px);">
+      <div style="display: flex; gap: 24px; align-items: baseline; margin-bottom: 44px;">
+        <span style="font-size: 12px; color: #2d4f8f; letter-spacing: 0.1em;">02</span>
+        <div>
+          <h2 style="font-family: Newsreader, Georgia, serif; font-weight: 400; font-size: clamp(26px,4.2vw,34px); margin: 0 0 8px; letter-spacing: -0.01em;">Evidence pack №1 — ARC-AGI-3</h2>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto; border: 1px solid #d8d3ca; background: #faf9f6;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 760px;">
+          <thead>
+            <tr style="text-align: left; font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: #6d6760;">
+              <th style="padding: 14px 18px; border-bottom: 1px solid #d8d3ca; font-weight: 400;">System</th>
+              <th style="padding: 14px 18px; border-bottom: 1px solid #d8d3ca; font-weight: 400;">Backbone</th>
+              <th style="padding: 14px 18px; border-bottom: 1px solid #d8d3ca; font-weight: 400;">Regime</th>
+              <th style="padding: 14px 18px; border-bottom: 1px solid #d8d3ca; font-weight: 400; text-align: right;">RHAE</th>
+              <th style="padding: 14px 18px; border-bottom: 1px solid #d8d3ca; font-weight: 400; text-align: right;">Games</th>
+              <th style="padding: 14px 18px; border-bottom: 1px solid #d8d3ca; font-weight: 400; text-align: right;">Levels</th>
+              <th style="padding: 14px 18px; border-bottom: 1px solid #d8d3ca; font-weight: 400; text-align: right;">Actions</th>
+              <th style="padding: 14px 18px; border-bottom: 1px solid #d8d3ca; font-weight: 400; text-align: right;">Audit trail</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df;">arc-skill</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; color: #6d6760;">Opus 5</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; color: #6d6760;">uncapped</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">100.00</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">25/25</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">183/183</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">7,645</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right; color: #a9a29a;">—</td>
+            </tr>
+            <tr style="background: #f0eee8;">
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; border-left: 2px solid #2d4f8f;">ASSAY <span style="color: #6d6760;">(ours)</span></td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; color: #6d6760;">Opus 5</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; color: #2d4f8f;">hard caps, gated</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">96.54</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">24/25</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">177/183</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">8,157</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right; color: #2d4f8f;">full</td>
+            </tr>
+            <tr>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df;">Prime Agent <span style="color: #6d6760;">(median card)</span></td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; color: #6d6760;">Opus 5</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; color: #6d6760;">uncapped</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">95.24</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">24/25</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">178/183</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right;">11,245</td>
+              <td style="padding: 15px 18px; border-bottom: 1px solid #eae6df; text-align: right; color: #a9a29a;">—</td>
+            </tr>
+            <tr>
+              <td style="padding: 15px 18px;">PRO-LONG</td>
+              <td style="padding: 15px 18px; color: #6d6760;">Fable 5</td>
+              <td style="padding: 15px 18px; color: #6d6760;">uncapped</td>
+              <td style="padding: 15px 18px; text-align: right;">94.71</td>
+              <td style="padding: 15px 18px; text-align: right;">19/25</td>
+              <td style="padding: 15px 18px; text-align: right; color: #a9a29a;">—</td>
+              <td style="padding: 15px 18px; text-align: right;">11,156</td>
+              <td style="padding: 15px 18px; text-align: right; color: #a9a29a;">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin: 12px 0 0; font-size: 12px; color: #6d6760; max-width: 90ch;">Same 25 game instances, verified by id. PRO-LONG ran on a stronger backbone and is directional context only. Prime Agent's best-of-3 reaches 183/183; ASSAY's numbers are single-protocol, no best-of-N.</p>
+
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 56px;">
+        <figure style="margin: 0;">
+          <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; border-bottom: 1px solid #d8d3ca; padding-bottom: 10px; margin-bottom: 16px;">Fig. 2 — probe vs. verified batch</div>
+          <canvas data-fig="tax" width="1000" height="480" style="display: block; width: 100%; height: auto;"></canvas>
+          <figcaption style="font-size: 12.5px; color: #6d6760; margin-top: 14px;">Each mark is one paid action. Filled marks are probes — single-action discovery steps taken to earn a model. The 8.0% is the whole price of the gate.</figcaption>
+        </figure>
+ 
+      </div>
+
+      <div style="margin-top: 48px; border: 1px solid #d8d3ca; background: #faf9f6; padding: 26px 24px;">
+        <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; margin-bottom: 14px;">Replay it</div>
+        <p style="margin: 0 0 18px; font-size: 14px; color: #423d37; max-width: 76ch;">The consolidated verification replay of all 25 recorded action sequences is a public ARC scorecard. Per-game action counts and per-level outcomes are on the card.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px 20px; font-size: 13px;">
+          <a href="https://arcprize.org/scorecards/702ccd4f-df1f-4118-bc8b-d79d3f4a1a32">Scorecard 702ccd4f</a>
+          <a href="#audit">rhae.py — open scorer</a>
+          <a href="#audit">baselines.json</a>
+          <span style="color: #6d6760;">scorer reproduces 25/25 published game scores, worst error 0.000000</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 HOW IT WORKS ──────────────────────────────────── -->
+  <section id="loop" style="scroll-margin-top: 68px; border-top: 1px solid #d8d3ca;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(52px,8vw,80px) clamp(20px,4vw,40px);">
+      <div style="display: flex; gap: 24px; align-items: baseline; margin-bottom: 44px;">
+        <span style="font-size: 12px; color: #2d4f8f; letter-spacing: 0.1em;">03</span>
+        <div>
+          <h2 style="font-family: Newsreader, Georgia, serif; font-weight: 400; font-size: clamp(26px,4.2vw,34px); margin: 0 0 8px; letter-spacing: -0.01em;">How it works</h2>
+          <p style="margin: 0; color: #6d6760; font-size: 14px; max-width: 60ch;">A broker daemon owns the environment session and its credentials. The agent process, it doesn't hold them.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: #d8d3ca; border: 1px solid #d8d3ca;">
+        <div style="background: #f7f5f1; padding: 22px;">
+          <div style="font-size: 11.5px; color: #2d4f8f; letter-spacing: 0.1em;">01 LOOK</div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: #423d37;">Raw observation from the world adapter</div>
+        </div>
+        <div style="background: #f7f5f1; padding: 22px;">
+          <div style="font-size: 11.5px; color: #2d4f8f; letter-spacing: 0.1em;">02 PREDICT</div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: #423d37;">A machine-parseable claim about what the world will report or registered before the next action.</div>
+        </div>
+        <div style="background: #f7f5f1; padding: 22px;">
+          <div style="font-size: 11.5px; color: #2d4f8f; letter-spacing: 0.1em;">03 ACT</div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: #423d37;">Action will be selected by the agent but a bare request to step the world is refused and journaled as ungated and invalidates the run.</div>
+        </div>
+        <div style="background: #f7f5f1; padding: 22px;">
+          <div style="font-size: 11.5px; color: #2d4f8f; letter-spacing: 0.1em;">04 GRADE</div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: #423d37;">Code grades the claim against the environment's own response. Out of agent hands.</div>
+        </div>
+        <div style="background: #f7f5f1; padding: 22px;">
+          <div style="font-size: 11.5px; color: #2d4f8f; letter-spacing: 0.1em;">05 RECORD</div>
+          <div style="margin-top: 12px; font-size: 13.5px; color: #423d37;">Every grade appends to a hash-chained, externally anchored journal. </div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,380px),1fr)); gap: clamp(36px,4vw,48px); margin-top: 56px; align-items: start;">
+        <div>
+          <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; border-bottom: 1px solid #d8d3ca; padding-bottom: 10px; margin-bottom: 0;">The claim grammar</div>
+          <div style="display: grid;"><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,190px),1fr)); gap: 4px 20px; padding: 16px 0; font-size: 13.5px; border-bottom: 1px solid #e2ded6;"><span>Direct state</span><span style="color: #423d37;">changes in the world · no-change · change · level-advance · win</span></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,190px),1fr)); gap: 4px 20px; padding: 16px 0; font-size: 13.5px; border-bottom: 1px solid #e2ded6;"><span>Declared channels</span><span style="color: #423d37;">typed extractors over raw observations, with equality / delta / threshold predicates and bounded temporal windows</span></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,190px),1fr)); gap: 4px 20px; padding: 16px 0; font-size: 13.5px; border-bottom: 1px solid #e2ded6;"><span>Executable verifiers</span><span style="color: #423d37;">programs the agent writes, run sandboxed by the referee against the raw before/after observations</span></div><div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,190px),1fr)); gap: 4px 20px; padding: 16px 0; font-size: 13.5px;"><span>Vacuity probe</span><span style="color: #423d37;">a verifier that cannot distinguish a transformed observation from the original is flagged vacuous and earns nothing</span></div></div>
+
+          <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; border-bottom: 1px solid #d8d3ca; padding-bottom: 10px; margin: 44px 0 18px;">The gates</div>
+          <ul style="margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; font-size: 13.5px; color: #423d37;">
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 12px;"><span style="color: #2d4f8f;">·</span><span>Credentials live in the broker; the agent cannot reach the session directly.</span></li>
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 12px;"><span style="color: #2d4f8f;">·</span><span>No action without a pre-registered prediction. Batches halt on first miss; unexecuted steps cost nothing.</span></li>
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 12px;"><span style="color: #2d4f8f;">·</span><span>A claimed world model starts untrusted; promotion buys exactly one privilege meaning longer verified batches. A miss demotes.</span></li>
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 12px;"><span style="color: #2d4f8f;">·</span><span>Goals are host-pinned. The agent can only propose an agenda change; it cannot self-ratify one.</span></li>
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 12px;"><span style="color: #2d4f8f;">·</span><span>Sealed paths: the benchmark's client internals are unreadable to the agent.</span></li>
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 12px;"><span style="color: #2d4f8f;">·</span><span>Imported knowledge enters demoted to foreign-hypothesis status. Only graded receipts promote it. Tested and proved for transfering knowledge</span></li>
+          </ul>
+        </div>
+
+        <div>
+          <figure style="margin: 0 0 40px;">
+            <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; border-bottom: 1px solid #d8d3ca; padding-bottom: 10px; margin-bottom: 16px;">Fig. 4 — a world, learned</div>
+            <canvas data-fig="grid" width="900" height="900" style="display: block; width: 100%; height: auto;"></canvas>
+            <figcaption style="font-size: 12.5px; color: #6d6760; margin-top: 14px;">A 64×64 colour grid, a level counter, a win state and one-word action hints. That is the whole tier-2 briefing. Structure is earned left to right, one graded transition at a time. Swap the adapter and the same loop learns a different world. </figcaption>
+          </figure>
+
+<!--           <div style="border: 1px solid #d8d3ca; background: #f7f5f1;">
+            <svg viewBox="0 0 400 225" style="display: block; width: 100%; height: auto;" role="img" aria-label="Placeholder for session recording">
+              <defs>
+                <pattern id="stripe-rec" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+                  <rect width="8" height="8" fill="#efece6"></rect>
+                  <rect width="3" height="8" fill="#e4e0d8"></rect>
+                </pattern>
+              </defs>
+              <rect width="400" height="225" fill="url(#stripe-rec)"></rect>
+              <rect x="0.5" y="0.5" width="399" height="224" fill="none" stroke="#d8d3ca"></rect>
+            </svg> -->
+            <!-- <div style="padding: 14px 18px; border-top: 1px solid #d8d3ca; font-size: 11.5px; color: #6d6760; letter-spacing: 0.04em;">A real session, replayed end to end — the recording lands here with the release.</div> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 04 Coverage Audit ─────────────────────────────────────────── -->
+  <section id="audit" style="scroll-margin-top: 68px; border-top: 1px solid #d8d3ca; background: #1a1815; color: #e8e4dc;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(52px,8vw,80px) clamp(20px,4vw,40px);">
+      <div style="display: flex; gap: 24px; align-items: baseline; margin-bottom: 44px;">
+        <span style="font-size: 12px; color: #8fa7d1; letter-spacing: 0.1em;">04</span>
+        <div>
+          <h2 style="font-family: Newsreader, Georgia, serif; font-weight: 400; font-size: clamp(26px,4.2vw,34px); margin: 0 0 8px; letter-spacing: -0.01em; color: #f7f5f1;">Coverage Audit</h2>
+          <p style="margin: 0; color: #a8a29a; font-size: 14px; max-width: 62ch;">The key to success was the record we've created with Assay that proves agent does exactly what it says and nothing is done without being recorded. We've created a harness that the journal is append-only under a rolling hash chain with external anchors. A third party recomputes integrity from the artifacts alone. You can audit it transparently and there is not depdency to a specifiec world.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,360px),1fr)); gap: clamp(36px,4vw,48px); align-items: start;">
+        <div>
+          <div style="border: 1px solid #35312b; background: #14120f;">
+            <div style="display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid #35312b;">
+              <span style="width: 8px; height: 8px; background: #35312b; display: block;"></span>
+              <span style="width: 8px; height: 8px; background: #35312b; display: block;"></span>
+              <span style="width: 8px; height: 8px; background: #35312b; display: block;"></span>
+            </div>
+            <pre style="margin: 0; padding: 20px 18px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; line-height: 2; color: #d8d3ca; overflow-x: auto;"><span style="color: #6d6760;">$</span> cd runs/dc22 && assay audit
+<span style="color: #6d6760;">  chain</span>   1,043 entries · chain intact · anchors intact (42)
+<span style="color: #6d6760;">  gates</span>   ungated-step events: <span style="color: #8fa7d1;">0</span> · 1,042/1,042 actions predicted first
+<span style="color: #6d6760;">  grades</span>  1,042 claims graded against the engine’s own response
+<span style="color: #6d6760;">  verdict</span> <span style="color: #8fa7d1;">CLEAN</span></pre>
+          </div>
+          <div style="display: grid; gap: 1px; background: #35312b; border: 1px solid #35312b; margin-top: 32px;">
+            <a href="#" onClick="{{ pending }}" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; background: #14120f; padding: 18px; border: 0; color: #e8e4dc; font-size: 13.5px;" style-hover="background:#201d19;">
+              <span>Sample journal — one full ARC run, hash-chained<div style="font-size: 11.5px; color: #6d6760; margin-top: 6px;">journal-dc22.jsonl.gz</div></span>
+              <span style="color: #8fa7d1;">↓</span>
+            </a>
+            <a href="#" onClick="{{ pending }}" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; background: #14120f; padding: 18px; border: 0; color: #e8e4dc; font-size: 13.5px;" style-hover="background:#201d19;">
+              <span>Standalone audit verifier<div style="font-size: 11.5px; color: #6d6760; margin-top: 6px;">recomputes the chain, anchors and integrity verdict</div></span>
+              <span style="color: #8fa7d1;">↓</span>
+            </a>
+            <a href="#" onClick="{{ pending }}" style="display: flex; justify-content: space-between; align-items: center; gap: 16px; background: #14120f; padding: 18px; border: 0; color: #e8e4dc; font-size: 13.5px;" style-hover="background:#201d19;">
+              <span>rhae.py + baselines.json - ARC's official scorer<div style="font-size: 11.5px; color: #6d6760; margin-top: 6px;">open scorer, validated against 25/25 published scores</div></span>
+              <span style="color: #8fa7d1;">↓</span>
+            </a>
+          </div>
+        </div>
+
+        <figure style="margin: 0;">
+          <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; border-bottom: 1px solid #35312b; padding-bottom: 10px; margin-bottom: 20px;">Fig. 5 — the hash chain</div>
+          <canvas data-fig="chain" width="1000" height="620" style="display: block; width: 100%; height: auto;"></canvas>
+          <figcaption style="font-size: 12.5px; color: #a8a29a; margin-top: 16px;">Each entry carries the digest of the one before it. Alter any cell and every link downstream fails — which is why the audit verdict can be recomputed by someone who does not trust us.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 05 FINDINGS ──────────────────────────────────────── -->
+  <section id="findings" style="scroll-margin-top: 68px; border-top: 1px solid #d8d3ca; background: #f4f2ee;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(52px,8vw,80px) clamp(20px,4vw,40px);">
+      <div style="display: flex; gap: 24px; align-items: baseline; margin-bottom: 44px;">
+        <span style="font-size: 12px; color: #2d4f8f; letter-spacing: 0.1em;">05</span>
+        <div>
+          <h2 style="font-family: Newsreader, Georgia, serif; font-weight: 400; font-size: clamp(26px,4.2vw,34px); margin: 0 0 8px; letter-spacing: -0.01em;">ARC AGI 3: Case study of broken proofs</h2>
+          <p style="margin: 0; color: #6d6760; font-size: 14px; max-width: 66ch;">On six occasions the agent proved a level impossible. Every proof was consistent with every recorded transition. Every proof was wrong and wrong precisely where no transition had ever gone.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-bottom: 52px;">
+        <figure style="margin: 0;">
+          <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; border-bottom: 1px solid #d8d3ca; padding-bottom: 10px; margin-bottom: 16px;">Fig. 6 — exercised vs. unexercised</div>
+          <canvas data-fig="exercised" width="1000" height="520" style="display: block; width: 100%; height: auto;"></canvas>
+          <figcaption style="font-size: 12.5px; color: #6d6760; margin-top: 14px;">Marks are graded transitions. The hatched region is where the record never went — and where every proof's load-bearing rule lived.</figcaption>
+        </figure>
+        <figure style="margin: 0;">
+          <div style="font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #6d6760; border-bottom: 1px solid #d8d3ca; padding-bottom: 10px; margin-bottom: 16px;">Fig. 7 — a proof collapsing</div>
+          <canvas data-fig="collapse" width="1000" height="520" style="display: block; width: 100%; height: auto;"></canvas>
+          <figcaption style="font-size: 12.5px; color: #6d6760; margin-top: 14px;">A sound deduction resting on one ungraded premise. Buy a probe for that edge and the conclusion — not the logic — falls over.</figcaption>
+        </figure>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px; background: #d8d3ca; border: 1px solid #d8d3ca;">
+        <div style="background: #faf9f6; padding: 24px 22px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11.5px; letter-spacing: 0.1em; color: #2d4f8f; margin-bottom: 14px;"><span>Game: DC22</span><span style="color: #6d6760;">L6 · won</span></div>
+          <p style="margin: 0 0 12px; font-size: 13.5px; color: #14120f;">“The switch is unreachable; the remaining blocks are isolated.”</p>
+          <p style="margin: 0; font-size: 13px; color: #6d6760;">All 74 inert probes had been taken in a single world-state. One coordinate had been inert-then-live earlier — the gate was geometric arming, and the blocks were connected.</p>
+        </div>
+        <div style="background: #faf9f6; padding: 24px 22px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11.5px; letter-spacing: 0.1em; color: #2d4f8f; margin-bottom: 14px;"><span>Game: S5I5</span><span style="color: #6d6760;">L7 · won</span></div>
+          <p style="margin: 0 0 12px; font-size: 13.5px; color: #14120f;">“Level 7 is provably unwinnable.”</p>
+          <p style="margin: 0; font-size: 13px; color: #6d6760;">The load-bearing rotation rule had only ever been exercised in the occupied failure mode. One graded probe of the off-board case showed rotation clips rather than refuses — un-trapping the arm and breaking level 8's length cap too.</p>
+        </div>
+        <div style="background: #faf9f6; padding: 24px 22px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11.5px; letter-spacing: 0.1em; color: #2d4f8f; margin-bottom: 14px;"><span>Game: SK48</span><span style="color: #6d6760;">L3 · won</span></div>
+          <p style="margin: 0 0 12px; font-size: 13.5px; color: #14120f;">“Unsolvable — by exhaustive search over 8.2 million states.”</p>
+          <p style="margin: 0; font-size: 13px; color: #6d6760;">The search was fully correct given its transition rules. One of them — freed blocks re-hook bottom-only — fit all 103 recorded transitions and had never been graded. Re-hooking is positional; the action written off as a no-op was SELECT.</p>
+        </div>
+        <div style="background: #faf9f6; padding: 24px 22px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11.5px; letter-spacing: 0.1em; color: #2d4f8f; margin-bottom: 14px;"><span>Game: WA30</span><span style="color: #6d6760;">won</span></div>
+          <p style="margin: 0 0 12px; font-size: 13.5px; color: #14120f;">“Throughput ceiling; hostiles effectively unkillable.”</p>
+          <p style="margin: 0; font-size: 13px; color: #6d6760;">All three hostile rules were false. The kill action works on any adjacent hostile — the prior session had seven free kills in front of it — and movement is one orthogonal cell per action.</p>
+        </div>
+        <div style="background: #faf9f6; padding: 24px 22px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11.5px; letter-spacing: 0.1em; color: #2d4f8f; margin-bottom: 14px;"><span>Game: BP35</span><span style="color: #6d6760;">L9 · won</span></div>
+          <p style="margin: 0 0 12px; font-size: 13.5px; color: #14120f;">“No switches remain; the map is certified pixel-complete.”</p>
+          <p style="margin: 0; font-size: 13px; color: #6d6760;">Nine switches sat above the map, visible only from inside the “dead-end” shaft. The deepest instance: the unexercised premise was the observation frame itself — “rendered” standing in for “exists”. Won at 95.27; running over baseline on late levels costs 0.19 set points.</p>
+        </div>
+        <div style="background: #faf9f6; padding: 24px 22px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11.5px; letter-spacing: 0.1em; color: #2d4f8f; margin-bottom: 14px;"><span>Game: BP35</span><span style="color: #6d6760;">L8 · won</span></div>
+          <p style="margin: 0 0 12px; font-size: 13.5px; color: #14120f;">“The switch is unreachable.”</p>
+          <p style="margin: 0; font-size: 13px; color: #6d6760;">The switch sat above the drifted map — the map had drifted, not the world. Two of the six proofs broke on this one game.</p>
+        </div>
+      </div>
+
+      <p style="margin: 36px 0 0; font-size: 14px; color: #423d37; max-width: 72ch;">Five of the six converted to wins inside their existing action budgets — cheap precisely because the audit step is free: it runs offline over the journal. The sixth remains open (roadmap).</p>
+
+      <div style="margin-top: 52px; border: 1px solid #2d4f8f; background: #faf9f6;">
+        <div style="padding: 22px 24px; border-bottom: 1px solid #dfe4ef;">
+          <div style="font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #2d4f8f;">The protocol</div>
+          <h3 style="font-family: Newsreader, Georgia, serif; font-weight: 400; font-size: 26px; margin: 10px 0 0;">Coverage audit</h3>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: #dfe4ef;">
+          <div style="background: #faf9f6; padding: 24px;">
+            <div style="font-size: 11.5px; color: #2d4f8f; margin-bottom: 12px;">STEP 1</div>
+            <div style="font-size: 13.5px; color: #423d37;">Enumerate the determining rules of the proof.</div>
+          </div>
+          <div style="background: #faf9f6; padding: 24px;">
+            <div style="font-size: 11.5px; color: #2d4f8f; margin-bottom: 12px;">STEP 2</div>
+            <div style="font-size: 13.5px; color: #423d37;">Audit the journal for what actually exercised each. Graded evidence in the relevant regime. And this step runs offline.</div>
+          </div>
+          <div style="background: #faf9f6; padding: 24px;">
+            <div style="font-size: 11.5px; color: #2d4f8f; margin-bottom: 12px;">STEP 3</div>
+            <div style="font-size: 13.5px; color: #423d37;">Buy graded probes for the gaps (ordered by cost).</div>
+          </div>
+        </div>
+        <div style="padding: 22px 24px; border-top: 1px solid #dfe4ef; font-family: Newsreader, Georgia, serif; font-size: clamp(16px,2.2vw,19px); line-height: 1.55; color: #14120f;">“Provably unsolvable” is a property of a model, not a world. Treat any agent-side impossibility as a trigger to audit the proof's unexercised rules.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 06 Assay LINEAGE ───────────────────────────────────────── -->
+  <section id="lineage" style="scroll-margin-top: 68px; border-top: 1px solid #d8d3ca;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(52px,8vw,80px) clamp(20px,4vw,40px);">
+      <div style="display: flex; gap: 24px; align-items: baseline; margin-bottom: 44px;">
+        <span style="font-size: 12px; color: #2d4f8f; letter-spacing: 0.1em;">06</span>
+        <div>
+          <h2 style="font-family: Newsreader, Georgia, serif; font-weight: 400; font-size: clamp(26px,4.2vw,34px); margin: 0 0 8px; letter-spacing: -0.01em;">Assay Lineage</h2>
+          <p style="margin: 0; color: #6d6760; font-size: 14px; max-width: 62ch;">Published work on this problem since early 2026. The progression Sensi → ARG → ASSAY, in public, with the negative results left in.</p>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,380px),1fr)); gap: clamp(36px,4vw,56px); align-items: start;">
+        <div style="border-left: 1px solid #d8d3ca; padding-left: 0;">
+          <a href="#" onClick="{{ pending }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,76px),auto)); gap: 8px 20px; padding: 22px 20px; border: 0; color: #1a1815;" style-hover="background:#f4f2ee;">
+            <span style="font-size: 12px; color: #6d6760;">JAN 23</span>
+            <span>
+              <span style="display: block; font-size: 15px;">The Student Who Can Study During the Exam</span>
+              <span style="display: block; font-size: 13px; color: #6d6760; margin-top: 8px;">Test-time-compute foundation.</span>
+            </span>
+          </a>
+          <a href="#" onClick="{{ pending }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,76px),auto)); gap: 8px 20px; padding: 22px 20px; border: 0; border-bottom: 1px solid #e2ded6; color: #1a1815;" style-hover="background:#f4f2ee;">
+            <span style="font-size: 12px; color: #6d6760;">JAN 28</span>
+            <span>
+              <span style="display: block; font-size: 15px;">Scaling Scaling Laws with Board Games</span>
+              <span style="display: block; font-size: 13px; color: #6d6760; margin-top: 8px;">Test-time-compute foundation.</span>
+            </span>
+          </a>
+          <a href="#" onClick="{{ pending }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,76px),auto)); gap: 8px 20px; padding: 22px 20px; border: 0; border-bottom: 1px solid #e2ded6; color: #1a1815; background: #f4f2ee;" style-hover="background:#eae6df;">
+            <span style="font-size: 12px; color: #2d4f8f;">FEB 16</span>
+            <span>
+              <span style="display: block; font-family: Newsreader, Georgia, serif; font-size: clamp(18px,2.6vw,21px); line-height: 1.3;">How Someone Can Know That He Doesn't Know</span>
+              <span style="display: block; font-size: 13px; color: #6d6760; margin-top: 10px;">The philosophical companion to the exercised-claim finding. Written in February about the epistemology of uncertainty; in August the harness broke six impossibility proofs by auditing what had never been exercised.</span>
+            </span>
+          </a>
+          <a href="#" onClick="{{ pending }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,76px),auto)); gap: 8px 20px; padding: 22px 20px; border: 0; border-bottom: 1px solid #e2ded6; color: #1a1815;" style-hover="background:#f4f2ee;">
+            <span style="font-size: 12px; color: #6d6760;">MAR 19</span>
+            <span>
+              <span style="display: block; font-size: 15px;">Why I Built Sensi</span>
+              <span style="display: block; font-size: 13px; color: #6d6760; margin-top: 8px;">Lineage, and the negative-results discipline on display.</span>
+            </span>
+          </a>
+          <a href="#" onClick="{{ pending }}" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,76px),auto)); gap: 8px 20px; padding: 22px 20px; border: 0; border-bottom: 1px solid #e2ded6; color: #1a1815;" style-hover="background:#f4f2ee;">
+            <span style="font-size: 12px; color: #6d6760;">MAY 18</span>
+            <span>
+              <span style="display: block; font-size: 15px;">ARC AGI 3: How to formulate?</span>
+              <span style="display: block; font-size: 13px; color: #6d6760; margin-top: 8px;">Timestamped priority on the problem formulation.</span>
+            </span>
+          </a>
+        </div>
+
+        <div style="display: grid; gap: 1px; background: #d8d3ca; border: 1px solid #d8d3ca;">
+          <div style="background: #f7f5f1; padding: 24px 22px;">
+            <div style="font-size: 11.5px; letter-spacing: 0.12em; color: #6d6760;">PROJECT · 2025</div>
+            <div style="font-family: Newsreader, Georgia, serif; font-size: 22px; margin: 10px 0 8px;">Sensi</div>
+            <div style="font-size: 13px; color: #6d6760;">Where the constitutional rule started: the model files typed proposals, the executive owns belief.</div>
+          </div>
+          <div style="background: #f7f5f1; padding: 24px 22px;">
+            <div style="font-size: 11.5px; letter-spacing: 0.12em; color: #6d6760;">PROJECT · 2026</div>
+            <div style="font-family: Newsreader, Georgia, serif; font-size: 22px; margin: 10px 0 8px;">ARG</div>
+            <div style="font-size: 13px; color: #6d6760;">The prior instrument, and its published null: zero level completions across 52 gated runs. The open question was whether verification-first architecture is structurally uncompetitive.</div>
+          </div>
+          <div style="background: #eef1f7; padding: 24px 22px; border-left: 2px solid #2d4f8f;">
+            <div style="font-size: 11.5px; letter-spacing: 0.12em; color: #2d4f8f;">PROJECT · 2026</div>
+            <div style="font-family: Newsreader, Georgia, serif; font-size: 22px; margin: 10px 0 8px;">ASSAY</div>
+            <div style="font-size: 13px; color: #423d37;">The answer: it is not. Same rule, two new bets — the referee is the engine; behaviour is installed, not exhorted.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 07 ROADMAP ───────────────────────────────────────── -->
+  <section style="border-top: 1px solid #d8d3ca; background: #f4f2ee;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(52px,8vw,80px) clamp(20px,4vw,40px);">
+      <div style="display: flex; gap: 24px; align-items: baseline; margin-bottom: 44px;">
+        <span style="font-size: 12px; color: #2d4f8f; letter-spacing: 0.1em;">07</span>
+        <div>
+          <h2 style="font-family: Newsreader, Georgia, serif; font-weight: 400; font-size: clamp(26px,4.2vw,34px); margin: 0 0 8px; letter-spacing: -0.01em;">Pre-registered next</h2>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1px; background: #d8d3ca; border: 1px solid #d8d3ca;">
+        <div style="background: #faf9f6; padding: 28px 26px;">
+          <div style="font-size: 11.5px; letter-spacing: 0.12em; color: #2d4f8f; margin-bottom: 14px;">PROTOCOL · FACTORIO</div>
+          <p style="margin: 0 0 18px; font-size: 14px; color: #423d37;">A long-horizon industrial world attached <span style="color: #14120f; font-weight: 600;">the same way ARC was: one adapter, one action registry, the same kernel and constitution unchanged</span>.</p>
+          <ul style="margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; font-size: 13px; color: #423d37;">
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 10px;"><span style="color: #2d4f8f;">·</span><span>Caps and starting information tier registered before the first action.</span></li>
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 10px;"><span style="color: #2d4f8f;">·</span><span>Domain-neutral constitution; no game-specific instruction of any kind.</span></li>
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 10px;"><span style="color: #2d4f8f;">·</span><span>Pre-registered bars, stated as thresholds, published with the plan.</span></li>
+            <li style="display: grid; grid-template-columns: 18px 1fr; gap: 10px;"><span style="color: #2d4f8f;">·</span><span>Regression gate on a reference game before any new result counts.</span></li>
+          </ul>
+        </div>
+        <div style="background: #faf9f6; padding: 28px 26px;">
+          <div style="font-size: 11.5px; letter-spacing: 0.12em; color: #6d6760; margin-bottom: 14px;">OPEN PROBLEM · LF52</div>
+          <p style="margin: 0 0 18px; font-size: 14px; color: #423d37;">The one game ASSAY did not clear: 4/10 levels at 364 actions, n=3, with a located diagnosis. It costs 3.27 of the 3.46 set points between ASSAY and 100.</p>
+          <div style="border-top: 1px solid #e2ded6; padding-top: 16px; font-size: 13px; color: #6d6760; display: grid; gap: 10px;">
+            <div style="display: flex; justify-content: space-between;"><span>ASSAY</span><span>4/10 · 364 actions</span></div>
+            <div style="display: flex; justify-content: space-between;"><span>Prime Agent</span><span>5/10 · 2,511 · GAME_OVER</span></div>
+            <div style="display: flex; justify-content: space-between;"><span>PRO-LONG</span><span>81.8% at 1,000</span></div>
+            <div style="display: flex; justify-content: space-between;"><span>arc-skill</span><span>won at 787</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── 08 ABOUT ─────────────────────────────────────────── -->
+  <section id="about" style="scroll-margin-top: 68px; border-top: 1px solid #d8d3ca; background: #1a1815; color: #e8e4dc;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(52px,8vw,80px) clamp(20px,4vw,40px);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%,340px),1fr)); gap: clamp(36px,4vw,56px); align-items: start;">
+        <div>
+          <div style="font-size: 12px; color: #8fa7d1; letter-spacing: 0.1em; margin-bottom: 20px;"></div>
+          <h2 style="font-family: Newsreader, Georgia, serif; font-weight: 200; font-size: clamp(22px,4.2vw,30px); margin: 0 0 20px; color: #f7f5f1;">by Mohsen Arjmandi</h2>
+          <p style="margin: 0 0 28px; font-size: 14.5px; color: #a8a29a; max-width: 56ch;">Independent researcher. Builds agent instruments where the referee, not the agent, decides what counts as knowledge — and where the record is the product. <a href="https://freddiespirit.com" style="font-size: 12px; letter-spacing: 0.04em;">Other works</a></p>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            <a href="mailto:mohsen.arjmandi@gmail.com" style="border: 1px solid #f7f5f1; background: #f7f5f1; color: #1a1815; padding: 13px 22px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;" style-hover="background:#8fa7d1;border-color:#8fa7d1;">Email</a>
+            <a href="#" onClick="{{ pending }}" style="border: 1px solid #4a453e; color: #e8e4dc; padding: 13px 22px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;" style-hover="border-color:#f7f5f1;">X / @</a>
+            <a href="#" onClick="{{ pending }}" style="border: 1px solid #4a453e; color: #e8e4dc; padding: 13px 22px; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;" style-hover="border-color:#f7f5f1;">Substack</a>
+          </div>
+        </div>
+        <div style="border: 1px solid #35312b; background: #14120f; padding: 26px 24px;">
+          <div style="font-size: 11.5px; letter-spacing: 0.12em; color: #8fa7d1; margin-bottom: 14px;">FOR LABS &amp; SAFETY INSTITUTES</div>
+          <p style="margin: 0 0 20px; font-size: 14px; color: #d8d3ca;">Reasoning, test-time learning, verified autonomy. I build agents that can prove what they did.</p> 
+          <a href="mailto:mohsen.arjmandi@gmail.com?subject=ASSAY%20research%20access" style="font-size: 13px; color: #8fa7d1; border-bottom-color: rgba(143,167,209,0.4);">Request access →</a>
+        </div>
+      </div>
+      <div style="border-top: 1px solid #35312b; margin-top: 64px; padding-top: 24px; display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; font-size: 11.5px; color: #6d6760; letter-spacing: 0.06em;">
+        <span>ASSAY · preprint 2026 · every figure on this page is drawn from the journals</span>
+        <span>n=1 throughout, and labelled as such</span>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2d4f8f&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#2d4f8f&quot;,&quot;#1f6f5c&quot;,&quot;#8a4b2a&quot;,&quot;#111111&quot;],&quot;section&quot;:&quot;Look&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this.draw();
+    this._onResize = () => this.draw();
+    window.addEventListener('resize', this._onResize);
+  }
+  componentDidUpdate() { this.draw(); }
+  componentWillUnmount() { window.removeEventListener('resize', this._onResize); }
+
+  ink() { return this.props.accentColor || '#2d4f8f'; }
+
+  renderVals() {
+    // Placeholder links: keep the affordance, stop the jump-to-top until real URLs land.
+    return { pending: e => e.preventDefault() };
+  }
+
+  draw() {
+    // Each figure has a wide and a narrow logical canvas. Because the canvas is
+    // CSS-scaled to 100% width, a smaller logical box = relatively larger labels.
+    const DIMS = {
+      gate:      { wide: [1800, 440], narrow: [660, 1240] },
+      tax:       { wide: [1000, 480], narrow: [660, 460] },
+      triple:    { wide: [1000, 480], narrow: [660, 520] },
+      grid:      { wide: [900, 900],  narrow: [660, 660] },
+      chain:     { wide: [1000, 620], narrow: [560, 1080] },
+      exercised: { wide: [1000, 520], narrow: [660, 500] },
+      collapse:  { wide: [1000, 520], narrow: [660, 520] }
+    };
+    document.querySelectorAll('canvas[data-fig]').forEach(c => {
+      const ctx = c.getContext('2d');
+      if (!ctx) return;
+      const key = c.dataset.fig;
+      const d = DIMS[key];
+      const narrow = c.clientWidth > 0 ? c.clientWidth < 460 : window.innerWidth < 700;
+      if (d) {
+        const [w, h] = narrow ? d.narrow : d.wide;
+        if (c.width !== w) c.width = w;
+        if (c.height !== h) c.height = h;
+      }
+      ctx.clearRect(0, 0, c.width, c.height);
+      const fn = this['fig_' + key];
+      if (fn) fn.call(this, ctx, c.width, c.height, narrow);
+    });
+  }
+
+  rng(seed) { let s = seed; return () => (s = (s * 1664525 + 1013904223) % 4294967296) / 4294967296; }
+
+  fig_gate(ctx, W, H, narrow) {
+    if (narrow) return this.fig_gate_v(ctx, W, H);
+    const A = this.ink(), INK = '#1a1815', MUTE = '#b8b1a7';
+    const labels = ['LOOK', 'PREDICT', 'ACT', 'GRADE', 'RECORD'];
+    const n = 5, pad = 150, span = W - pad * 2, cy = H * 0.44;
+    const xs = labels.map((_, i) => pad + (span * i) / (n - 1));
+    ctx.lineWidth = 2;
+    // connecting spine
+    for (let i = 0; i < n - 1; i++) {
+      const x1 = xs[i] + 46, x2 = xs[i + 1] - 46;
+      ctx.strokeStyle = MUTE; ctx.beginPath(); ctx.moveTo(x1, cy); ctx.lineTo(x2 - 12, cy); ctx.stroke();
+      ctx.fillStyle = MUTE; ctx.beginPath();
+      ctx.moveTo(x2, cy); ctx.lineTo(x2 - 13, cy - 7); ctx.lineTo(x2 - 13, cy + 7); ctx.closePath(); ctx.fill();
+    }
+    // return arc: note -> look
+    ctx.strokeStyle = MUTE; ctx.setLineDash([6, 7]); ctx.beginPath();
+    ctx.moveTo(xs[4], cy + 46); ctx.bezierCurveTo(xs[4], cy + 190, xs[0], cy + 190, xs[0], cy + 58);
+    ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = MUTE; ctx.beginPath();
+    ctx.moveTo(xs[0], cy + 46); ctx.lineTo(xs[0] - 7, cy + 60); ctx.lineTo(xs[0] + 7, cy + 60); ctx.closePath(); ctx.fill();
+    labels.forEach((lab, i) => {
+      const x = xs[i], gated = i === 2;
+      ctx.save();
+      if (gated) {
+        // the gate: a slot the action must pass through
+        ctx.strokeStyle = A; ctx.lineWidth = 2.5;
+        ctx.strokeRect(x - 44, cy - 44, 88, 88);
+        ctx.beginPath(); ctx.moveTo(x - 44, cy - 12); ctx.lineTo(x + 44, cy - 12); ctx.stroke();
+        ctx.fillStyle = A;
+        for (let k = 0; k < 4; k++) ctx.fillRect(x - 30 + k * 18, cy + 4, 8, 22);
+      } else {
+        ctx.strokeStyle = INK; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.arc(x, cy, 42, 0, Math.PI * 2); ctx.stroke();
+        if (i === 3) { // grade: a tick
+          ctx.strokeStyle = A; ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.moveTo(x - 16, cy + 1); ctx.lineTo(x - 4, cy + 14); ctx.lineTo(x + 18, cy - 15); ctx.stroke();
+        } else if (i === 0) { // look: scanning bars
+          ctx.strokeStyle = INK; ctx.lineWidth = 1.4;
+          for (let k = -2; k <= 2; k++) { const w = 26 - Math.abs(k) * 7; ctx.beginPath(); ctx.moveTo(x - w, cy + k * 10); ctx.lineTo(x + w, cy + k * 10); ctx.stroke(); }
+        } else if (i === 1) { // predict: a hollow target ahead of the fact
+          ctx.strokeStyle = A; ctx.lineWidth = 1.6; ctx.setLineDash([4, 4]);
+          ctx.beginPath(); ctx.arc(x, cy, 19, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+          ctx.fillStyle = A; ctx.beginPath(); ctx.arc(x, cy, 4.5, 0, Math.PI * 2); ctx.fill();
+        } else { // note: stacked ledger lines
+          ctx.strokeStyle = INK; ctx.lineWidth = 1.4;
+          for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(x - 22, cy + k * 9 + 2); ctx.lineTo(x + 22 - (k === 2 ? 14 : 0), cy + k * 9 + 2); ctx.stroke(); }
+        }
+      }
+      ctx.restore();
+      ctx.fillStyle = gated ? A : '#6d6760';
+      ctx.font = '500 21px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(lab, x, cy - 74);
+    });
+    ctx.fillStyle = '#a9a29a';
+    ctx.font = '18px "IBM Plex Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('no prediction, no action', xs[2], cy + 232);
+  }
+
+  fig_gate_v(ctx, W, H) {
+    const A = this.ink(), INK = '#1a1815', MUTE = '#b8b1a7';
+    const labels = ['LOOK', 'PREDICT', 'ACT', 'GRADE', 'RECORD'];
+    const cx = W * 0.44, top = 90, step = (H - 200) / 4;
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 4; i++) {
+      const y1 = top + i * step + 46, y2 = top + (i + 1) * step - 46;
+      ctx.strokeStyle = MUTE; ctx.beginPath(); ctx.moveTo(cx, y1); ctx.lineTo(cx, y2 - 12); ctx.stroke();
+      ctx.fillStyle = MUTE; ctx.beginPath();
+      ctx.moveTo(cx, y2); ctx.lineTo(cx - 7, y2 - 13); ctx.lineTo(cx + 7, y2 - 13); ctx.closePath(); ctx.fill();
+    }
+    const yLast = top + 4 * step, edge = W - 34;
+    ctx.strokeStyle = MUTE; ctx.setLineDash([6, 7]); ctx.beginPath();
+    ctx.moveTo(cx + 46, yLast); ctx.bezierCurveTo(edge, yLast, edge, top, cx + 58, top);
+    ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = MUTE; ctx.beginPath();
+    ctx.moveTo(cx + 46, top); ctx.lineTo(cx + 60, top - 7); ctx.lineTo(cx + 60, top + 7); ctx.closePath(); ctx.fill();
+    labels.forEach((lab, i) => {
+      const y = top + i * step, gated = i === 2;
+      if (gated) {
+        ctx.strokeStyle = A; ctx.lineWidth = 2.5;
+        ctx.strokeRect(cx - 42, y - 42, 84, 84);
+        ctx.beginPath(); ctx.moveTo(cx - 42, y - 12); ctx.lineTo(cx + 42, y - 12); ctx.stroke();
+        ctx.fillStyle = A;
+        for (let k = 0; k < 4; k++) ctx.fillRect(cx - 29 + k * 17, y + 4, 8, 20);
+      } else {
+        ctx.strokeStyle = INK; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.arc(cx, y, 40, 0, Math.PI * 2); ctx.stroke();
+        if (i === 3) {
+          ctx.strokeStyle = A; ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.moveTo(cx - 15, y + 1); ctx.lineTo(cx - 3, y + 13); ctx.lineTo(cx + 17, y - 14); ctx.stroke();
+        } else if (i === 0) {
+          for (let k = -2; k <= 2; k++) { const w = 25 - Math.abs(k) * 7; ctx.beginPath(); ctx.moveTo(cx - w, y + k * 10); ctx.lineTo(cx + w, y + k * 10); ctx.stroke(); }
+        } else if (i === 1) {
+          ctx.strokeStyle = A; ctx.setLineDash([4, 4]);
+          ctx.beginPath(); ctx.arc(cx, y, 18, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+          ctx.fillStyle = A; ctx.beginPath(); ctx.arc(cx, y, 4.5, 0, Math.PI * 2); ctx.fill();
+        } else {
+          for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(cx - 21, y + k * 9 + 2); ctx.lineTo(cx + 21 - (k === 2 ? 13 : 0), y + k * 9 + 2); ctx.stroke(); }
+        }
+      }
+      ctx.fillStyle = gated ? A : '#6d6760';
+      ctx.font = '500 21px "IBM Plex Mono", monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText(lab, 8, y - 52);
+    });
+    ctx.fillStyle = '#a9a29a';
+    ctx.font = '19px "IBM Plex Mono", monospace'; ctx.textAlign = 'left';
+    ctx.fillText('no prediction, no action', 8, H - 22);
+  }
+
+  fig_tax(ctx, W, H, narrow) {
+    const A = this.ink();
+    const cols = narrow ? 20 : 40, rows = narrow ? 34 : 20, cw = (W - 40) / cols, ch = (H - 60) / rows;
+    const total = cols * rows, probes = Math.round(total * 0.08);
+    const r = this.rng(7);
+    const probeSet = new Set();
+    while (probeSet.size < probes) probeSet.add(Math.floor(r() * total));
+    for (let i = 0; i < total; i++) {
+      const x = 20 + (i % cols) * cw, y = 14 + Math.floor(i / cols) * ch;
+      if (probeSet.has(i)) { ctx.fillStyle = A; ctx.fillRect(x, y, cw * 0.5, ch * 0.62); }
+      else { ctx.fillStyle = '#cfc9bf'; ctx.fillRect(x, y, cw * 0.5, ch * 0.62); }
+    }
+    ctx.strokeStyle = '#d8d3ca'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(20, H - 38); ctx.lineTo(W - 20, H - 38); ctx.stroke();
+    ctx.font = '19px "IBM Plex Mono", monospace';
+    ctx.fillStyle = A; ctx.textAlign = 'left'; ctx.fillText('656 probe · 8.0%', 20, H - 12);
+    ctx.fillStyle = '#8b857d'; ctx.textAlign = 'right'; ctx.fillText('7,501 in verified batches', W - 20, H - 12);
+  }
+
+  fig_triple(ctx, W, H) {
+    const A = this.ink(), INK = '#1a1815';
+    const startX = 60, endX = W - 130, ys = [80, H / 2, H - 90];
+    const names = ['journalled engine state', 'harness-free replay', 'live ARC-server replay'];
+    ctx.font = '19px "IBM Plex Mono", monospace'; ctx.textAlign = 'left';
+    ys.forEach((y, i) => {
+      ctx.strokeStyle = '#c6c0b6'; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(startX, y); ctx.lineTo(endX - 120, y);
+      ctx.bezierCurveTo(endX - 60, y, endX - 60, H / 2, endX - 10, H / 2); ctx.stroke();
+      ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(startX, y, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#6d6760'; ctx.fillText(names[i], startX + 18, y - 16);
+    });
+    ctx.strokeStyle = A; ctx.lineWidth = 2.5;
+    ctx.strokeRect(endX - 4, H / 2 - 34, 68, 68);
+    ctx.lineWidth = 3.5; ctx.beginPath();
+    ctx.moveTo(endX + 12, H / 2 + 1); ctx.lineTo(endX + 25, H / 2 + 16); ctx.lineTo(endX + 50, H / 2 - 17); ctx.stroke();
+    ctx.fillStyle = A; ctx.font = '18px "IBM Plex Mono", monospace'; ctx.textAlign = 'center';
+    ctx.fillText('WIN', endX + 30, H / 2 + 58);
+  }
+
+  fig_grid(ctx, W, H) {
+    const A = this.ink();
+    const N = 32, cell = (Math.min(W, H) - 24) / N, ox = (W - cell * N) / 2, oy = (H - cell * N) / 2;
+    const r = this.rng(1337);
+    const noise = [];
+    for (let i = 0; i < N * N; i++) noise.push(r());
+    for (let gy = 0; gy < N; gy++) {
+      for (let gx = 0; gx < N; gx++) {
+        const t = gx / (N - 1); // resolution ramps left -> right
+        const i = gy * N + gx;
+        const structured = ((gx >> 2) + (gy >> 2)) % 3 === 0 || (gx > 8 && gx < 24 && gy > 12 && gy < 20 && (gx + gy) % 2 === 0);
+        const on = noise[i] < 0.5 - t * 0.5 ? noise[i] < 0.22 : structured;
+        const x = ox + gx * cell, y = oy + gy * cell;
+        if (on) { ctx.fillStyle = t > 0.62 ? A : '#c3bdb2'; ctx.globalAlpha = 0.25 + t * 0.75; ctx.fillRect(x, y, cell - 1.2, cell - 1.2); ctx.globalAlpha = 1; }
+        else { ctx.strokeStyle = '#e0dcd4'; ctx.lineWidth = 0.7; ctx.strokeRect(x + 0.4, y + 0.4, cell - 1.6, cell - 1.6); }
+      }
+    }
+    ctx.strokeStyle = '#d8d3ca'; ctx.lineWidth = 1;
+    ctx.strokeRect(ox - 5, oy - 5, cell * N + 10, cell * N + 10);
+  }
+
+  fig_chain(ctx, W, H, narrow) {
+    const A = '#8fa7d1', LINE = '#3a3630', TXT = '#6d6760';
+    if (narrow) {
+      const n = 5, bw = 300, bh = 150, gap = (H - 90 - n * bh) / (n - 1), x = 24;
+      ctx.font = '17px "IBM Plex Mono", monospace';
+      for (let i = 0; i < n; i++) {
+        const y = 70 + i * (bh + gap);
+        ctx.strokeStyle = LINE; ctx.lineWidth = 1.6; ctx.strokeRect(x, y, bw, bh);
+        ctx.beginPath(); ctx.moveTo(x, y + 42); ctx.lineTo(x + bw, y + 42); ctx.stroke();
+        ctx.fillStyle = A; ctx.textAlign = 'left';
+        ctx.fillText('prev ' + (i === 0 ? '∅' : '#' + (1000 + i * 7)), x + 12, y + 27);
+        ctx.fillStyle = '#57524b';
+        for (let k = 0; k < 4; k++) ctx.fillRect(x + 12, y + 62 + k * 18, (bw - 26) * (0.45 + ((i * 7 + k * 3) % 5) / 9), 6);
+        ctx.fillStyle = A; ctx.fillRect(x + 12, y + bh - 20, bw - 24, 2);
+        ctx.fillStyle = TXT; ctx.textAlign = 'left';
+        ctx.fillText('entry ' + (i + 1), x + bw + 14, y + bh / 2);
+        if (i < n - 1) {
+          const y2 = y + bh + gap;
+          ctx.strokeStyle = A; ctx.lineWidth = 1.6;
+          ctx.beginPath(); ctx.moveTo(x + 16, y + bh - 19); ctx.lineTo(x - 12, y + bh - 19);
+          ctx.lineTo(x - 12, y2 + 27); ctx.lineTo(x + 4, y2 + 27); ctx.stroke();
+          ctx.fillStyle = A; ctx.beginPath();
+          ctx.moveTo(x + 16, y2 + 27); ctx.lineTo(x + 3, y2 + 21); ctx.lineTo(x + 3, y2 + 33); ctx.closePath(); ctx.fill();
+        }
+      }
+      ctx.fillStyle = TXT; ctx.textAlign = 'left'; ctx.font = '18px "IBM Plex Mono", monospace';
+      ctx.fillText('append-only · rolling digest', 24, 40);
+      return;
+    }
+    const n = 5, bw = 128, gap = (W - 60 - n * bw) / (n - 1), y = 110, bh = 200;
+    ctx.font = '17px "IBM Plex Mono", monospace';
+    for (let i = 0; i < n; i++) {
+      const x = 30 + i * (bw + gap);
+      ctx.strokeStyle = LINE; ctx.lineWidth = 1.6; ctx.strokeRect(x, y, bw, bh);
+      ctx.strokeStyle = LINE; ctx.beginPath(); ctx.moveTo(x, y + 46); ctx.lineTo(x + bw, y + 46); ctx.stroke();
+      ctx.fillStyle = A; ctx.textAlign = 'left'; ctx.font = '17px "IBM Plex Mono", monospace';
+      ctx.fillText('prev ' + (i === 0 ? '∅' : '#' + (1000 + i * 7)), x + 12, y + 30);
+      ctx.fillStyle = '#57524b';
+      for (let k = 0; k < 6; k++) {
+        const w = (bw - 26) * (0.45 + ((i * 7 + k * 3) % 5) / 9);
+        ctx.fillRect(x + 12, y + 68 + k * 20, Math.min(w, bw - 26), 6);
+      }
+      ctx.fillStyle = A; ctx.fillRect(x + 12, y + bh - 22, bw - 24, 2);
+      if (i < n - 1) {
+        const x2 = x + bw + gap;
+        ctx.strokeStyle = A; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(x + bw, y + bh - 21); ctx.lineTo(x + bw + gap / 2, y + bh - 21);
+        ctx.lineTo(x + bw + gap / 2, y + 30); ctx.lineTo(x2 - 12, y + 30); ctx.stroke();
+        ctx.fillStyle = A; ctx.beginPath();
+        ctx.moveTo(x2, y + 30); ctx.lineTo(x2 - 13, y + 24); ctx.lineTo(x2 - 13, y + 36); ctx.closePath(); ctx.fill();
+      }
+      ctx.fillStyle = TXT; ctx.textAlign = 'center';
+      ctx.fillText('entry ' + (i + 1), x + bw / 2, y + bh + 34);
+    }
+    ctx.fillStyle = TXT; ctx.textAlign = 'left'; ctx.font = '18px "IBM Plex Mono", monospace';
+    ctx.fillText('append-only · rolling digest · externally anchored', 30, 52);
+  }
+
+  fig_exercised(ctx, W, H, narrow) {
+    const A = this.ink();
+    const x0 = 60, y0 = 40, x1 = W - 40, y1 = H - 70;
+    // hatched unexercised region (upper-right)
+    ctx.save();
+    ctx.beginPath(); ctx.rect(x1 - (x1 - x0) * 0.42, y0, (x1 - x0) * 0.42, (y1 - y0) * 0.5); ctx.clip();
+    ctx.strokeStyle = '#cfc9bf'; ctx.lineWidth = 1.2;
+    for (let d = -H; d < W * 2; d += 12) { ctx.beginPath(); ctx.moveTo(d, y0); ctx.lineTo(d + H, y1); ctx.stroke(); }
+    ctx.restore();
+    ctx.strokeStyle = '#a9a29a'; ctx.setLineDash([5, 5]); ctx.lineWidth = 1.4;
+    ctx.strokeRect(x1 - (x1 - x0) * 0.42, y0, (x1 - x0) * 0.42, (y1 - y0) * 0.5); ctx.setLineDash([]);
+    // graded transitions
+    const r = this.rng(99);
+    for (let i = 0; i < 230; i++) {
+      const px = x0 + r() * (x1 - x0), py = y0 + r() * (y1 - y0);
+      const inGap = px > x1 - (x1 - x0) * 0.42 && py < y0 + (y1 - y0) * 0.5;
+      if (inGap) continue;
+      ctx.fillStyle = '#5c564e'; ctx.beginPath(); ctx.arc(px, py, 3.2, 0, Math.PI * 2); ctx.fill();
+    }
+    // the probes bought for the gap
+    [[0.68, 0.22], [0.78, 0.34], [0.88, 0.15]].forEach(([fx, fy]) => {
+      const px = x0 + fx * (x1 - x0), py = y0 + fy * (y1 - y0);
+      ctx.strokeStyle = A; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(px - 8, py); ctx.lineTo(px + 8, py); ctx.moveTo(px, py - 8); ctx.lineTo(px, py + 8); ctx.stroke();
+    });
+    ctx.strokeStyle = '#c6c0b6'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1); ctx.stroke();
+    ctx.font = '18px "IBM Plex Mono", monospace'; ctx.fillStyle = '#8b857d'; ctx.textAlign = 'left';
+    ctx.fillText('graded transitions', x0, y1 + 36);
+    ctx.fillStyle = A; ctx.textAlign = 'right';
+    ctx.fillText(narrow ? 'unexercised + probes' : 'unexercised rule regime + bought probes', x1, y1 + 36);
+  }
+
+  fig_collapse(ctx, W, H) {
+    const A = this.ink(), INK = '#5c564e';
+    const nodes = [[W * 0.5, 52], [W * 0.26, 175], [W * 0.74, 175], [W * 0.14, 300], [W * 0.4, 300], [W * 0.62, 300], [W * 0.88, 300]];
+    const edges = [[0, 1], [0, 2], [1, 3], [1, 4], [2, 5], [2, 6]];
+    const weak = 5;
+    edges.forEach(([a, b], i) => {
+      ctx.strokeStyle = i === weak ? A : '#c6c0b6';
+      ctx.lineWidth = i === weak ? 2.2 : 1.5;
+      if (i === weak) ctx.setLineDash([6, 6]);
+      ctx.beginPath(); ctx.moveTo(nodes[a][0], nodes[a][1] + 16); ctx.lineTo(nodes[b][0], nodes[b][1] - 16); ctx.stroke();
+      ctx.setLineDash([]);
+    });
+    nodes.forEach(([x, y], i) => {
+      const isWeakChild = i === 6;
+      ctx.strokeStyle = isWeakChild ? A : INK; ctx.lineWidth = 1.7;
+      if (i === 0) {
+        ctx.beginPath(); ctx.moveTo(x, y - 20); ctx.lineTo(x + 20, y); ctx.lineTo(x, y + 20); ctx.lineTo(x - 20, y); ctx.closePath(); ctx.stroke();
+      } else if (isWeakChild) {
+        ctx.setLineDash([4, 4]); ctx.beginPath(); ctx.arc(x, y, 16, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
+        ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.moveTo(x - 8, y - 8); ctx.lineTo(x + 8, y + 8); ctx.moveTo(x + 8, y - 8); ctx.lineTo(x - 8, y + 8); ctx.stroke();
+      } else {
+        ctx.beginPath(); ctx.arc(x, y, 16, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = '#8b857d'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(x - 7, y); ctx.lineTo(x - 2, y + 6); ctx.lineTo(x + 8, y - 6); ctx.stroke();
+      }
+    });
+    ctx.font = '18px "IBM Plex Mono", monospace'; ctx.textAlign = 'center';
+    ctx.fillStyle = '#8b857d'; ctx.fillText('“impossible”', nodes[0][0], nodes[0][1] - 34);
+    ctx.fillStyle = A; ctx.textAlign = 'right';
+    ctx.fillText('never graded in this regime', W - 20, H - 26);
+    ctx.fillStyle = '#8b857d'; ctx.textAlign = 'left';
+    ctx.fillText('rules the proof load-bears on', 20, H - 26);
+  }
+}
+</script>
+</body>
+</html>
