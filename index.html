@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ASSAY — the referee harness</title>
-<meta name="description" content="A referee for agent runs in any world: every action predicted before it is taken, every claim graded in code, every event in a hash-chained journal. Evidence pack №1: ARC-AGI-3, RHAE 96.54, server-confirmed." />
-<meta property="og:title" content="ASSAY — the referee harness" />
-<meta property="og:description" content="The agent proposes, the referee disposes. Verified frontier performance on ARC-AGI-3 at a measured 8% integrity overhead." />
+<title>ASSAY: a general agent harness</title>
+<meta name="description" content="A general agent that reasons through any world you connect, learns it from interaction, and improves across runs. One discipline drives it: no action without a prediction, every prediction graded in code. A fully auditable record falls out of the same discipline. First benchmark: ARC-AGI-3, RHAE 96.54, server-confirmed." />
+<meta property="og:title" content="ASSAY: a general agent harness" />
+<meta property="og:description" content="The agent proposes, the referee disposes. A general agent that reasons through any world you connect, learns it from interaction, and improves across runs. First benchmark: ARC-AGI-3, RHAE 96.54." />
 <script src="./support.js"></script>
 </head>
 <body>
@@ -371,7 +371,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <span class="nav__mark"></span>
       <span class="nav__name">ASSAY</span>
       <span class="nav__sep">/</span>
-      <span class="nav__tag">referee harness</span>
+      <span class="nav__tag">general agent harness</span>
     </div>
     <div class="nav__links">
       <a href="#anyworld">Any world</a>
@@ -379,6 +379,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <a href="#loop">How it works</a>
       <a href="#audit">Audit it</a>
       <a href="#findings">Findings</a>
+      <a href="#access">Access</a>
       <a href="#about">Contact</a>
     </div>
   </div>
@@ -388,11 +389,11 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
     <div class="wrap">
       <div class="split split--hero">
         <div>
-          <div class="eyebrow" style="margin-bottom: var(--s6);">A referee for agent runs in any world</div>
+          <div class="eyebrow" style="margin-bottom: var(--s6);">Reasoning · test-time learning · self-improving agents</div>
           <h1 class="h1">The agent proposes,<br />the referee disposes.</h1>
-          <p style="margin: 0 0 var(--s7); max-width: 46ch; color: var(--ink-body); font-size: var(--fs-lede);">A general agent under a referee. In any world you connect, the agent discovers what its tools do, works its goal into subgoals and internalizes what it learns. The referee makes it predict before it acts, grades every prediction in code and keeps everything on the record. First benchmark: frontier performance on ARC-AGI-3, along with its audit trail.</p>
+          <p style="margin: 0 0 var(--s7); max-width: 46ch; color: var(--ink-body); font-size: var(--fs-lede);">A general agent that reasons its way through any world you connect. It discovers what its tools do, breaks its goal into subgoals, learns the world from interaction, and carries what it learns into later runs. One discipline drives it: no action without a prediction, and every prediction graded in code. That is what makes it reason under scarcity, and a fully auditable record falls out of the same discipline. First benchmark: frontier performance on ARC-AGI-3.</p>
           <div class="btns">
-            <a class="btn btn--solid" href="./uploads/preprint.pdf">Read the paper</a>
+            <a class="btn btn--solid" href="https://doi.org/10.5281/zenodo.22145967">Read the paper</a>
             <a class="btn btn--ghost" href="#audit">Audit a run</a>
           </div>
         </div>
@@ -787,6 +788,29 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
     </div>
   </section>
 
+  <!-- ── ACCESS / VERIFIER ────────────────────────────────── -->
+  <section id="access">
+    <div class="wrap">
+      <div class="shead">
+        <span class="shead__num">·</span>
+        <div>
+          <h2 class="h2">What is open, and what is not</h2>
+        </div>
+      </div>
+      <div class="cells cells--2">
+        <div class="cell cell--raised">
+          <span class="eyebrow eyebrow--accent cell__label">The harness</span>
+          <p style="margin: 0; font-size: var(--fs-base); color: var(--ink-body); line-height: var(--lh-body);">ASSAY is <span style="color: var(--ink-strong);">private research for now</span>. It will open for beta testing. If you are a lab or a safety institute and want early access, get in touch.</p>
+        </div>
+        <div class="cell cell--raised">
+          <span class="eyebrow cell__label">The verifier</span>
+          <p style="margin: 0 0 var(--s5); font-size: var(--fs-base); color: var(--ink-body); line-height: var(--lh-body);">The verification layer <span style="color: var(--ink-strong);">stays open source and MIT-licensed</span>. Anyone can recompute a run from its artifacts alone, without trusting us. Review it and verify the sample run at the link below.</p>
+          <a href="https://github.com/arjmandi/assay-verify">github.com/arjmandi/assay-verify →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── 07 LINEAGE ───────────────────────────────────────── -->
   <section id="lineage" class="band">
     <div class="wrap">
@@ -921,7 +945,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <div class="split">
         <div>
           <h2 class="h2" style="font-weight: 300;">by Mohsen Arjmandi</h2>
-          <p style="margin: var(--s5) 0 var(--s7); font-size: var(--fs-lede); color: var(--dark-body); max-width: 56ch; line-height: var(--lh-body);">Independent researcher. Builds agent instruments where the referee, not the agent, decides what counts as knowledge — and where the record is the product. <a href="https://freddiespirit.com" style="color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4); white-space: nowrap;">Other works</a></p>
+          <p style="margin: var(--s5) 0 var(--s7); font-size: var(--fs-lede); color: var(--dark-body); max-width: 56ch; line-height: var(--lh-body);">Independent researcher building agents that reason their way through unfamiliar worlds, learn them from interaction, and improve across runs. The discipline that makes them reason is the same discipline that makes every run auditable. <a href="https://freddiespirit.com" style="color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4); white-space: nowrap;">Other works</a></p>
 
           <div class="btns">
             <a class="btn btn--solid" href="mailto:mohsen.arjmandi@gmail.com">Email</a>
