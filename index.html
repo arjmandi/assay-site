@@ -152,8 +152,9 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 
 .eyebrow { font-size: var(--fs-label); letter-spacing: var(--ls-caps); text-transform: uppercase; color: var(--ink-mute); }
 .eyebrow--accent { color: var(--accent); }
-.band--dark .eyebrow { color: var(--dark-mute); }
+.band--dark .eyebrow { color: var(--dark); }
 .band--dark .eyebrow--accent { color: var(--accent-lift); }
+.eyebrow.block__label { font-size: var(--fs-base); }
 
 /* a labelled sub-block inside a section */
 .block { margin-top: var(--s8); }
@@ -390,7 +391,6 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
     <div class="wrap">
       <div class="split split--hero">
         <div>
-          <div class="eyebrow" style="margin-bottom: var(--s6);">Reasoning · test-time learning · self-improving agents</div>
           <h1 class="h1">Given a world,<br />not an explanation.</h1>
           <p style="margin: 0 0 var(--s7); max-width: 46ch; color: var(--ink-body); font-size: var(--fs-lede);">ASSAY is an LLM reasoning harness. The agent is bound by exactly two things it cannot change: the physics of the world it is connected to, and the physics of its own actions. Everything else the agent works out and writes down itself: what its tools do, what the goal is, and what the world contains. First benchmark: ARC-AGI-3, 24 of 25 games, told only to win.</p>
           <div class="btns">
@@ -406,12 +406,12 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
               <span class="eyebrow">RHAE on ARC-AGI-3</span>
             </div>
             <div class="stat__meta">
-              <span>24/25 games</span><span>177/183 levels</span><span>8,157 actions</span>
+              <span>24/25 games</span><span>177/183 levels</span>
             </div>
           </div>
-          <div class="stat__row"><span>Ungated events</span><span class="stat__val">zero</span></div>
+          <div class="stat__row"><span>Violation of bounded actions</span><span class="stat__val">zero</span></div>
           <div class="stat__row"><span>Exploration tax</span><span class="stat__val">8.0%</span></div>
-          <div class="stat__row"><span>Wins verified</span><span class="stat__val">3 ways, all 24</span></div>
+          <div class="stat__row"><span>Total actions</span><span class="stat__val">8,157</span></div>
           <div class="stat__foot">
             <a href="https://arcprize.org/scorecards/702ccd4f-df1f-4118-bc8b-d79d3f4a1a32">Public scorecard 702ccd4f →</a>
           </div>
@@ -434,7 +434,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <div class="shead">
         <span class="shead__num">01</span>
         <div>
-          <h2 class="h2">One kernel, any world</h2>
+          <h2 class="h2">One harness, any world</h2>
           <p class="lede">An agent with these capabilities is different from the LLM it runs on. The same constitution, conditions, budgets, and audit run identically across worlds. ARC-AGI-3 is the first benchmark. Factorio and OOLONG ran their first sweeps under the identical standard.</p>
         </div>
       </div>
