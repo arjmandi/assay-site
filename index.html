@@ -177,6 +177,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 .band--dark .cells { background: var(--dark-rule); border-color: var(--dark-rule); }
 .band--dark .cell { background: var(--dark-sunk); }
 .band--dark .cell__body { color: var(--dark-body); }
+.eyebrow.cell__label { font-size: var(--fs-base); }
 
 /* ── key/value rows ───────────────────────────────────── */
 .rows { display: grid; }
@@ -191,6 +192,8 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 .row:last-child { border-bottom: 0; }
 .row__k { color: var(--ink); }
 .row__k--accent { color: var(--accent); font-size: var(--fs-label); letter-spacing: var(--ls-caps); text-transform: uppercase; }
+.row__k { font-size: var(--fs-lede); }
+.row__k--accent { font-size: var(--fs-sm); }
 .row__v { color: var(--ink-body); line-height: var(--lh-body); max-width: 74ch; }
 @media (max-width: 620px) {
   .row { grid-template-columns: 1fr; }
@@ -440,8 +443,8 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       </div>
 
       <div class="block" style="margin-top: 0;">
-        <span class="eyebrow block__label">Physics of the world: a registry and an adapter</span>
-        <p class="note note--body">A world arrives as data. Both pieces are fixed, and they are the only fixed things. Nothing else is assumed about the world. The agent is never told what its tools do or what the goal looks like. It discovers both.</p>
+        <span class="eyebrow block__label">Physics of the world: </span>
+        <p class="note note--body">A world arrives as data via a registry and an adapter. Both pieces are fixed. Nothing is assumed in the harness internally the harness understands the world only through these two. The agent is never told what its tools do or what the goal looks like. It discovers both.</p>
         <div class="cells cells--2" style="margin-top: var(--s5);">
           <div class="cell">
             <span class="eyebrow eyebrow--accent cell__label">Registry</span>
@@ -455,8 +458,8 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       </div>
 
       <div class="block">
-        <span class="eyebrow block__label">Physics of action: no action without a prediction</span>
-        <p class="note note--body">The agent cannot act before it commits a machine-checkable prediction of what the action will do. Code grades every prediction against what actually happened. Every action has a price under a hard cap. Scarcity is what makes the agent reason. The same rule produces a replayable proof of every step. The full loop is in <a href="#loop">how it works</a>.</p>
+        <span class="eyebrow block__label">Physics of action:</span>
+        <p class="note note--body">The agent cannot act before it commits a machine-checkable prediction of what the action will do. Code grades every prediction against what actually happened. Every action has a price under a hard cap. This makes the agent reason under scarcity. This also makes the agent machine-verifiable and produces a replayable proof of every step. <a href="#loop">See the full loop</a>.</p>
       </div>
 
       <div class="block">
