@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ASSAY: a general agent harness</title>
-<meta name="description" content="A general agent that reasons through any world you connect, learns it from interaction, and improves across runs. One discipline drives it: no action without a prediction, every prediction graded in code. A fully auditable record falls out of the same discipline. First benchmark: ARC-AGI-3, RHAE 96.54, server-confirmed." />
-<meta property="og:title" content="ASSAY: a general agent harness" />
-<meta property="og:description" content="The agent proposes, the referee disposes. A general agent that reasons through any world you connect, learns it from interaction, and improves across runs. First benchmark: ARC-AGI-3, RHAE 96.54." />
+<title>ASSAY: a reasoning harness</title>
+<meta name="description" content="Given a world, not an explanation. The agent is bound by the physics of its world and the physics of its own actions. It discovers its tools, builds its own model of the world in code, and cannot act without a prediction graded in code. First benchmark: ARC-AGI-3, 24 of 25 games, RHAE 96.54." />
+<meta property="og:title" content="ASSAY: a reasoning harness" />
+<meta property="og:description" content="Given a world, not an explanation. The agent discovers its tools, builds its own model of the world in code, and cannot act without a graded prediction. ARC-AGI-3: 24 of 25 games, RHAE 96.54." />
 <script src="./support.js"></script>
 </head>
 <body>
@@ -371,7 +371,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <span class="nav__mark"></span>
       <span class="nav__name">ASSAY</span>
       <span class="nav__sep">/</span>
-      <span class="nav__tag">general agent harness</span>
+      <span class="nav__tag">a reasoning harness</span>
     </div>
     <div class="nav__links">
       <a href="#anyworld">Any world</a>
@@ -379,6 +379,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <a href="#loop">How it works</a>
       <a href="#audit">Audit it</a>
       <a href="#findings">Findings</a>
+      <a href="#worlds">Three worlds</a>
       <a href="#access">Access</a>
       <a href="#about">Contact</a>
     </div>
@@ -390,8 +391,8 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <div class="split split--hero">
         <div>
           <div class="eyebrow" style="margin-bottom: var(--s6);">Reasoning · test-time learning · self-improving agents</div>
-          <h1 class="h1">The agent proposes,<br />the referee disposes.</h1>
-          <p style="margin: 0 0 var(--s7); max-width: 46ch; color: var(--ink-body); font-size: var(--fs-lede);">A general agent that reasons its way through any world you connect. It discovers what its tools do, breaks its goal into subgoals, learns the world from interaction, and carries what it learns into later runs. One discipline drives it: no action without a prediction, and every prediction graded in code. That is what makes it reason under scarcity, and a fully auditable record falls out of the same discipline. First benchmark: frontier performance on ARC-AGI-3.</p>
+          <h1 class="h1">Given a world,<br />not an explanation.</h1>
+          <p style="margin: 0 0 var(--s7); max-width: 46ch; color: var(--ink-body); font-size: var(--fs-lede);">ASSAY is an LLM reasoning harness. The agent is bound by exactly two things it cannot change: the physics of the world it is connected to, and the physics of its own actions. Everything else the agent works out and writes down itself: what its tools do, what the goal is, and what the world contains. First benchmark: ARC-AGI-3, 24 of 25 games, told only to win.</p>
           <div class="btns">
             <a class="btn btn--solid" href="https://doi.org/10.5281/zenodo.22145967">Read the paper</a>
             <a class="btn btn--ghost" href="#audit">Audit a run</a>
@@ -434,22 +435,28 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         <span class="shead__num">01</span>
         <div>
           <h2 class="h2">One kernel, any world</h2>
-          <p class="lede">An agent with these capabilities is different from the LLM it runs on. The same constitution, conditions, budgets, and audit run identically across worlds. ARC-AGI-3 was the first benchmark. Factorio and OOLONG publish next under the identical standard.</p>
+          <p class="lede">An agent with these capabilities is different from the LLM it runs on. The same constitution, conditions, budgets, and audit run identically across worlds. ARC-AGI-3 is the first benchmark. Factorio and OOLONG ran their first sweeps under the identical standard.</p>
         </div>
       </div>
 
       <div class="block" style="margin-top: 0;">
-        <span class="eyebrow block__label">What you need to define</span>
-        <div class="cells cells--2" style="border-top: 0;">
+        <span class="eyebrow block__label">Physics of the world: a registry and an adapter</span>
+        <p class="note note--body">A world arrives as data. Both pieces are fixed, and they are the only fixed things. Nothing else is assumed about the world. The agent is never told what its tools do or what the goal looks like. It discovers both.</p>
+        <div class="cells cells--2" style="margin-top: var(--s5);">
           <div class="cell">
             <span class="eyebrow eyebrow--accent cell__label">Registry</span>
-            <div class="cell__body">A JSON determining what the agent may do: names, typed parameters, budgets, gates, the goal.</div>
+            <div class="cell__body">A JSON listing what the agent may do: action names, typed parameters, budgets, gates, the goal. Detail is whatever the world cares to give. Semantics are never included.</div>
           </div>
           <div class="cell">
             <span class="eyebrow eyebrow--accent cell__label">Adapter</span>
-            <div class="cell__body">A Python file with one factory: it returns observations and applies actions. Assay assumes nothing else about your world.</div>
+            <div class="cell__body">A Python file with one factory: it returns observations and applies actions. Think of it as MCP for a world.</div>
           </div>
         </div>
+      </div>
+
+      <div class="block">
+        <span class="eyebrow block__label">Physics of action: no action without a prediction</span>
+        <p class="note note--body">The agent cannot act before it commits a machine-checkable prediction of what the action will do. Code grades every prediction against what actually happened. Every action has a price under a hard cap. Scarcity is what makes the agent reason. The same rule produces a replayable proof of every step. The full loop is in <a href="#loop">how it works</a>.</p>
       </div>
 
       <div class="block">
@@ -460,8 +467,8 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
             <span class="row__v">It is not told what its actions do beyond the registry contract. It learns each tool by predicting its effect and paying one action for the answer. The probe share in Fig. 2 is the measured cost of this discovery.</span>
           </div>
           <div class="row">
-            <span class="row__k row__k--accent">Explores its observations</span>
-            <span class="row__v">It declares typed channels over the raw observation and stakes its claims on them.</span>
+            <span class="row__k row__k--accent">Names what it sees</span>
+            <span class="row__v">It declares typed channels over the raw observation and stakes its claims on them. A channel is never silently redefined. New understanding gets a new name, and the journal keeps both.</span>
           </div>
           <div class="row">
             <span class="row__k row__k--accent">Works goals</span>
@@ -469,11 +476,11 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           </div>
           <div class="row">
             <span class="row__k row__k--accent">Learns across runs</span>
-            <span class="row__v">Knowledge exports between runs. An import enters as a foreign hypothesis and is re-earned through graded claims before it is trusted.</span>
+            <span class="row__v">Knowledge exports between runs. An import enters as a foreign hypothesis and is re-earned through graded claims before it is trusted. Graded mechanics and code transfer. Prose plans rot.</span>
           </div>
           <div class="row">
             <span class="row__k row__k--accent">Stays grounded</span>
-            <span class="row__v">Every belief comes from a graded prediction, so the agent stays grounded in what actually happened. Acting beside the plan cannot be silent; the record shows it. The bottleneck moves to planning.</span>
+            <span class="row__v">Every belief comes from a graded prediction, so the agent stays grounded in what actually happened. Acting beside the plan cannot be silent. The record shows it. The bottleneck moves to planning.</span>
           </div>
         </div>
       </div>
@@ -486,7 +493,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <div class="shead">
         <span class="shead__num">02</span>
         <div>
-          <h2 class="h2">Evidence pack №1 — ARC-AGI-3</h2>
+          <h2 class="h2">Evidence pack №1: ARC-AGI-3</h2>
         </div>
       </div>
 
@@ -548,12 +555,13 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           </tbody>
         </table>
       </div>
-      <p class="note">Same 25 game instances, verified by id. PRO-LONG ran on a stronger backbone and is directional context only. Prime Agent's best-of-3 reaches 183/183; ASSAY's numbers are single-protocol, no best-of-N.</p>
+      <p class="note">Selected comparisons, as of Aug 28, 2026. Same 25 game instances, verified by id. PRO-LONG ran on a stronger backbone and is directional context only. Prime Agent's best-of-3 reaches 183/183. ASSAY's numbers are single-protocol, no best-of-N. Several systems reached ~100 on this set in August. The score alone is not the story.</p>
+      <p class="note note--body" style="margin-top: var(--s4);">At the ceiling, RHAE behaves as a completion checklist. It can no longer distinguish systems on efficiency, cost, starting information, caps, or integrity. Those are the axes where saturated systems still differ, and this page reports all five.</p>
 
       <figure class="fig fig--half" style="margin-top: var(--s8);">
         <div class="fig__label"><span class="eyebrow">Fig. 2 — probe vs. verified batch</span></div>
         <canvas data-fig="tax" width="1000" height="480"></canvas>
-        <figcaption class="fig__cap">Each mark is one paid action. Filled marks are probes: single actions the agent spends to discover what its tools do and what it is seeing. The 8.0% is the whole price of the gate.</figcaption>
+        <figcaption class="fig__cap">Each mark is one paid action. Filled marks are probes: single actions the agent spends to discover what its tools do and what it is seeing. The 8.0% is the whole price of the gate. On the same game instance, a traced control run of the leading uncapped harness spent a 58-action discovery ramp at 42% probe share. ASSAY spent 22 actions at 14%, from less starting information.</figcaption>
       </figure>
 
       <div style="margin-top: var(--s8); border: 1px solid var(--rule); background: var(--raised); padding: var(--s5);">
@@ -561,11 +569,13 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         <p style="margin: 0 0 var(--s5); font-size: var(--fs-base); color: var(--ink-body); max-width: 76ch;">The consolidated verification replay of all 25 recorded action sequences is a public ARC scorecard. Per-game action counts and per-level outcomes are on the card.</p>
         <div style="display: flex; flex-wrap: wrap; gap: var(--s3) var(--s5); font-size: var(--fs-sm); align-items: baseline;">
           <a href="https://arcprize.org/scorecards/702ccd4f-df1f-4118-bc8b-d79d3f4a1a32">Scorecard 702ccd4f</a>
-          <a href="https://github.com/arjmandi/assay-verify/blob/main/evidence/arcagi/rhae.py">rhae.py — open scorer</a>
+          <a href="https://github.com/arjmandi/assay-verify/blob/main/evidence/arcagi/rhae.py">rhae.py: open scorer</a>
           <a href="https://github.com/arjmandi/assay-verify/blob/main/evidence/arcagi/baselines.json">baselines.json</a>
           <span style="color: var(--ink-mute); font-size: var(--fs-micro);">scorer reproduces 25/25 published game scores, worst error 0.000000</span>
         </div>
       </div>
+
+      <p class="note">Cost, stated honestly: eleven runs were API-metered at $283.68 total, between $11.61 and $53.89 per run. The full set extrapolates to roughly $550 to $650. The only published comparator total is PRO-LONG's $1,750 for its 25-game cohort.</p>
     </div>
   </section>
 
@@ -576,7 +586,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         <span class="shead__num">03</span>
         <div>
           <h2 class="h2">How it works</h2>
-          <p class="lede">A broker daemon owns the environment session and its credentials. The agent process, it doesn't hold them.</p>
+          <p class="lede">A broker daemon owns the environment session and its credentials. The agent process never holds them.</p>
         </div>
       </div>
 
@@ -587,11 +597,11 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         </div>
         <div class="cell">
           <span class="eyebrow eyebrow--accent cell__label">02 Predict</span>
-          <div class="cell__body">A machine-parseable claim about what the world will report or registered before the next action.</div>
+          <div class="cell__body">A machine-parseable claim about what the world will report, registered before the action executes.</div>
         </div>
         <div class="cell">
           <span class="eyebrow eyebrow--accent cell__label">03 Act</span>
-          <div class="cell__body">Action will be selected by the agent but a bare request to step the world is refused and journaled as ungated and invalidates the run.</div>
+          <div class="cell__body">The agent selects the action. A bare request to step the world is refused, journaled as ungated, and invalidates the run.</div>
         </div>
         <div class="cell">
           <span class="eyebrow eyebrow--accent cell__label">04 Grade</span>
@@ -628,13 +638,18 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           <div class="block">
             <span class="eyebrow block__label">The gates</span>
             <ul class="rules">
-              <li>Credentials live in the broker; the agent cannot reach the session directly.</li>
-              <li>No action without a pre-registered prediction. Batches halt on first miss; unexecuted steps cost nothing.</li>
-              <li>A claimed world model starts untrusted; promotion buys exactly one privilege meaning longer verified batches. A miss demotes.</li>
-              <li>Goals are host-pinned. The agent can only propose an agenda change; it cannot self-ratify one.</li>
+              <li>Credentials live in the broker. The agent cannot reach the session directly.</li>
+              <li>No action without a pre-registered prediction. Batches halt on first miss. Unexecuted steps cost nothing.</li>
+              <li>A claimed world model starts untrusted. Promotion buys exactly one privilege: longer verified batches. A miss demotes.</li>
+              <li>Goals are host-pinned. The agent can only propose an agenda change. It cannot self-ratify one.</li>
               <li>Sealed paths: the benchmark's client internals are unreadable to the agent.</li>
-              <li>Imported knowledge enters demoted to foreign-hypothesis status. Only graded receipts promote it. Tested and proved for transfering knowledge</li>
+              <li>Imported knowledge enters demoted to foreign-hypothesis status. Only graded receipts promote it on the live journal.</li>
             </ul>
+          </div>
+
+          <div class="block">
+            <span class="eyebrow block__label">Channels: the agent's own referents</span>
+            <p class="note note--body">A channel is a named reading of the observation, registered once and then claimed against. Goal, level, and remaining budget are built in. The agent declares the rest, as a dotted path into the observation or as a small extractor program that runs in the same sandbox as verifiers. From then on, a rule is checked against a value instead of a memory. A claim that names an unregistered channel is refused before any spend and counted on a mis-reference meter. A channel is never silently redefined. When the lever turns out to be a three-state switch, the agent declares the switch as a new referent and the journal keeps both. This is the answer to referent grounding loss: the referent lives in code, not in the context window.</p>
           </div>
         </div>
 
@@ -653,8 +668,8 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <div class="shead">
         <span class="shead__num">04</span>
         <div>
-          <h2 class="h2">Coverage Audit</h2>
-          <p class="lede">The key to success was the record we've created with Assay that proves agent does exactly what it says and nothing is done without being recorded. We've created a harness that the journal is append-only under a rolling hash chain with external anchors. A third party recomputes integrity from the artifacts alone. You can audit it transparently and there is not depdency to a specifiec world.</p>
+          <h2 class="h2">Audit it</h2>
+          <p class="lede">The journal is append-only under a rolling hash chain with external anchors. Every action, prediction, and grade lands in it, so what the agent does is exactly what it declared on the record. A third party recomputes integrity from the artifacts alone, without trusting us. Nothing here depends on a specific world.</p>
         </div>
       </div>
 
@@ -682,7 +697,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 
           <div class="dl">
             <a href="https://github.com/arjmandi/assay-verify/raw/main/evidence/arcagi/journal-dc22.jsonl.gz">
-              <span>Sample journal — one full ARC run, hash-chained<span class="dl__sub">journal-dc22.jsonl.gz</span></span>
+              <span>Sample journal: one full ARC run, hash-chained<span class="dl__sub">journal-dc22.jsonl.gz</span></span>
               <span class="dl__arrow">↓</span>
             </a>
             <a href="https://github.com/arjmandi/assay-verify">
@@ -690,7 +705,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
               <span class="dl__arrow">↓</span>
             </a>
             <a href="https://github.com/arjmandi/assay-verify/tree/main/evidence/arcagi">
-              <span>rhae.py + baselines.json — ARC's official scorer<span class="dl__sub">open scorer, validated against 25/25 published scores</span></span>
+              <span>rhae.py + baselines.json: ARC's official scorer<span class="dl__sub">open scorer, validated against 25/25 published scores</span></span>
               <span class="dl__arrow">↓</span>
             </a>
           </div>
@@ -699,7 +714,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         <figure class="fig">
           <div class="fig__label"><span class="eyebrow">Fig. 5 — the hash chain</span></div>
           <canvas data-fig="chain" width="1000" height="620"></canvas>
-          <figcaption class="fig__cap">Each entry carries the digest of the one before it. Alter any cell and every link downstream fails — which is why the audit verdict can be recomputed by someone who does not trust us.</figcaption>
+          <figcaption class="fig__cap">Each entry carries the digest of the one before it. Alter any cell and every link downstream fails. That is why the audit verdict can be recomputed by someone who does not trust us.</figcaption>
         </figure>
       </div>
     </div>
@@ -720,49 +735,49 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         <figure class="fig">
           <div class="fig__label"><span class="eyebrow">Fig. 6 — exercised vs. unexercised</span></div>
           <canvas data-fig="exercised" width="1000" height="520"></canvas>
-          <figcaption class="fig__cap">Marks are graded transitions. The hatched region is where the record never went — and where every proof's load-bearing rule lived.</figcaption>
+          <figcaption class="fig__cap">Marks are graded transitions. The hatched region is where the record never went. Every proof's load-bearing rule lived there.</figcaption>
         </figure>
         <figure class="fig">
           <div class="fig__label"><span class="eyebrow">Fig. 7 — a proof collapsing</span></div>
           <canvas data-fig="collapse" width="1000" height="520"></canvas>
-          <figcaption class="fig__cap">A sound deduction resting on one ungraded premise. Buy a probe for that edge and the conclusion — not the logic — falls over.</figcaption>
+          <figcaption class="fig__cap">A sound deduction resting on one ungraded premise. Buy a probe for that edge and the conclusion falls over. The logic stays intact.</figcaption>
         </figure>
       </div>
 
       <div class="cells cells--3">
         <div class="cell case">
           <div class="case__head"><span>Game: DC22</span><span>L6 · won</span></div>
-          <p class="case__claim">“The switch is unreachable; the remaining blocks are isolated.”</p>
-          <p class="case__body">All 74 inert probes had been taken in a single world-state. One coordinate had been inert-then-live earlier — the gate was geometric arming, and the blocks were connected.</p>
+          <p class="case__claim">“The switch is unreachable, the remaining blocks isolated.”</p>
+          <p class="case__body">All 74 inert probes had been taken in a single world-state. One coordinate had been inert earlier and live later, which reframed refuses-to-act as conditional. The gate was geometric arming, and the blocks were connected.</p>
         </div>
         <div class="cell case">
           <div class="case__head"><span>Game: S5I5</span><span>L7 · won</span></div>
           <p class="case__claim">“Level 7 is provably unwinnable.”</p>
-          <p class="case__body">The load-bearing rotation rule had only ever been exercised in the occupied failure mode. One graded probe of the off-board case showed rotation clips rather than refuses — un-trapping the arm and breaking level 8's length cap too.</p>
+          <p class="case__body">The load-bearing rotation rule had only ever been exercised in the occupied failure mode. One graded probe of the off-board case showed rotation clips rather than refuses. That un-trapped the arm and broke level 8's length cap as well.</p>
         </div>
         <div class="cell case">
           <div class="case__head"><span>Game: SK48</span><span>L3 · won</span></div>
-          <p class="case__claim">“Unsolvable — by exhaustive search over 8.2 million states.”</p>
-          <p class="case__body">The search was fully correct given its transition rules. One of them — freed blocks re-hook bottom-only — fit all 103 recorded transitions and had never been graded. Re-hooking is positional; the action written off as a no-op was SELECT.</p>
+          <p class="case__claim">“Unsolvable, by exhaustive search over 8.2 million states.”</p>
+          <p class="case__body">The search was fully correct given its transition rules. One of them fit all 103 recorded transitions and had never been graded: freed blocks re-hook bottom-only. Re-hooking is positional, and the action written off as a no-op was SELECT.</p>
         </div>
         <div class="cell case">
           <div class="case__head"><span>Game: WA30</span><span>won</span></div>
-          <p class="case__claim">“Throughput ceiling; hostiles effectively unkillable.”</p>
-          <p class="case__body">All three hostile rules were false. The kill action works on any adjacent hostile — the prior session had seven free kills in front of it — and movement is one orthogonal cell per action.</p>
+          <p class="case__claim">“Throughput ceiling, hostiles effectively unkillable.”</p>
+          <p class="case__body">All three hostile rules were false. The kill action works on any adjacent hostile, and the prior session had seven free kills in front of it. Movement is one orthogonal cell per action.</p>
         </div>
         <div class="cell case">
           <div class="case__head"><span>Game: BP35</span><span>L9 · won</span></div>
-          <p class="case__claim">“No switches remain; the map is certified pixel-complete.”</p>
-          <p class="case__body">Nine switches sat above the map, visible only from inside the “dead-end” shaft. The deepest instance: the unexercised premise was the observation frame itself — “rendered” standing in for “exists”. Won at 95.27; running over baseline on late levels costs 0.19 set points.</p>
+          <p class="case__claim">“No switches remain, the map certified pixel-complete.”</p>
+          <p class="case__body">Nine switches sat above the map, visible only from inside the “dead-end” shaft. The deepest instance: the unexercised premise was the observation frame itself, with “rendered” standing in for “exists”. Won at 95.27. Running over baseline on late levels costs 0.19 set points.</p>
         </div>
         <div class="cell case">
           <div class="case__head"><span>Game: BP35</span><span>L8 · won</span></div>
           <p class="case__claim">“The switch is unreachable.”</p>
-          <p class="case__body">The switch sat above the drifted map — the map had drifted, not the world. Two of the six proofs broke on this one game.</p>
+          <p class="case__body">The switch sat above the drifted map. The map had drifted, not the world. Two of the six proofs broke on this one game.</p>
         </div>
       </div>
 
-      <p class="note note--body">Five of the six converted to wins inside their existing action budgets — cheap precisely because the audit step is free: it runs offline over the journal. The sixth remains open (roadmap).</p>
+      <p class="note note--body">Five of the six converted to wins inside their existing action budgets. The audit step is cheap because it runs offline over the journal. The sixth remains open (roadmap).</p>
 
       <div class="panel">
         <div class="panel__head">
@@ -776,7 +791,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           </div>
           <div>
             <span class="eyebrow eyebrow--accent cell__label">Step 2</span>
-            <div class="cell__body">Audit the journal for what actually exercised each. Graded evidence in the relevant regime. And this step runs offline.</div>
+            <div class="cell__body">Audit the journal for what actually exercised each rule. Graded evidence in the relevant regime counts. This step runs offline.</div>
           </div>
           <div>
             <span class="eyebrow eyebrow--accent cell__label">Step 3</span>
@@ -831,7 +846,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
               <span class="tl__mark"></span>
             </summary>
             <div class="tl__body">
-              <p class="tl__note">The philosophical companion to the exercised-claim finding. Written in February about the epistemology of uncertainty; in August the harness broke six impossibility proofs by auditing what had never been exercised.</p>
+              <p class="tl__note">The philosophical companion to the exercised-claim finding. Written in February about the epistemology of uncertainty. In August the harness broke six impossibility proofs by auditing what had never been exercised.</p>
               <a class="tl__link" href="https://freddiespirit.substack.com/p/how-someone-can-know-that-he-doesnt">Read on Substack →</a>
             </div>
           </details>
@@ -897,42 +912,61 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           <div class="proj proj--now">
             <span class="eyebrow eyebrow--accent">Project · 2026</span>
             <div class="h3">ASSAY</div>
-            <div class="proj__body">The answer: it is not. Same rule, two new bets — the referee is the engine; behaviour is installed, not exhorted.</div>
+            <div class="proj__body">The answer: it is not. Same rule, two new bets. The referee is the engine. Behaviour is installed, not exhorted.</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── 08 ROADMAP ───────────────────────────────────────── -->
-  <section class="band band--alt">
+  <!-- ── 08 THREE WORLDS ──────────────────────────────────── -->
+  <section id="worlds" class="band band--alt">
     <div class="wrap">
       <div class="shead">
         <span class="shead__num">07</span>
         <div>
-          <h2 class="h2">Pre-registered next</h2>
+          <h2 class="h2">One harness, three worlds</h2>
+          <p class="lede">Generality is only checkable across domains. The same kernel, constitution, and protocol ran unchanged on three worlds, each attached through one adapter and one registry. Every cell in these sweeps is n=1 and labeled as such.</p>
         </div>
       </div>
 
-      <div class="cells cells--2">
+      <div class="cells cells--3">
         <div class="cell cell--raised">
-          <span class="eyebrow eyebrow--accent cell__label">Protocol · Factorio</span>
-          <p style="margin: 0; font-size: var(--fs-base); color: var(--ink-body); line-height: var(--lh-body);">A long-horizon industrial world attached <span style="color: var(--ink-strong);">the same way ARC was: one adapter, one action registry, the same kernel and constitution unchanged</span>.</p>
-          <ul class="rules">
-            <li>Caps and starting information tier registered before the first action.</li>
-            <li>Domain-neutral constitution; no game-specific instruction of any kind.</li>
-            <li>Pre-registered bars, stated as thresholds, published with the plan.</li>
-            <li>Regression gate on a reference game before any new result counts.</li>
-          </ul>
+          <span class="eyebrow eyebrow--accent cell__label">World 1 · ARC-AGI-3</span>
+          <div class="cell__body">The headline benchmark: 24 of 25 games, RHAE 96.54, server-scored on a public scorecard, under hard caps registered before the run. The full evidence pack is <a href="#evidence">above</a>.</div>
         </div>
         <div class="cell cell--raised">
-          <span class="eyebrow cell__label">Open problem · LF52</span>
-          <p style="margin: 0 0 var(--s5); font-size: var(--fs-base); color: var(--ink-body); line-height: var(--lh-body);">The one game ASSAY did not clear: 4/10 levels at 364 actions, n=3, with a located diagnosis. It costs 3.27 of the 3.46 set points between ASSAY and 100.</p>
-          <div class="rows" style="border-top: 1px solid var(--rule-soft);">
-            <div class="row" style="grid-template-columns: 1fr auto;"><span class="row__k">ASSAY</span><span class="row__v" style="text-align: right; font-variant-numeric: tabular-nums;">4/10 · 364 actions</span></div>
-            <div class="row" style="grid-template-columns: 1fr auto;"><span class="row__k">Prime Agent</span><span class="row__v" style="text-align: right; font-variant-numeric: tabular-nums;">5/10 · 2,511 · GAME_OVER</span></div>
-            <div class="row" style="grid-template-columns: 1fr auto;"><span class="row__k">PRO-LONG</span><span class="row__v" style="text-align: right; font-variant-numeric: tabular-nums;">81.8% at 1,000</span></div>
-            <div class="row" style="grid-template-columns: 1fr auto;"><span class="row__k">arc-skill</span><span class="row__v" style="text-align: right; font-variant-numeric: tabular-nums;">won at 787</span></div>
+          <span class="eyebrow eyebrow--accent cell__label">World 2 · Factorio</span>
+          <div class="cell__body">The security test. A published agent, instructed not to cheat, reached the admin channel and spawned resources into its factories. ASSAY closes that class by construction. The registry screens every program the agent proposes and refuses the admin, host, and statistic-forging paths before they execute. On a first calibration sweep of three throughput tasks, the gated agent won all three in 5, 9, and 9 paid actions with zero ungated events.</div>
+        </div>
+        <div class="cell cell--raised">
+          <span class="eyebrow eyebrow--accent cell__label">World 3 · OOLONG</span>
+          <div class="cell__body">The long-context test. The corpus is written to a file the agent reads with its own offline tools, so the model's context window never holds it. On a first length-ladder sweep at 128K, 1M, and 4M tokens, ASSAY stays in the band of mature general harnesses across the ladder. At 4M it reaches the top of the field, level with Claude Code and ahead of Prime Agent. The bare model cannot answer past 128K.</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <span class="eyebrow block__label">Next</span>
+        <div class="cells cells--2" style="margin-top: var(--s5);">
+          <div class="cell cell--raised">
+            <span class="eyebrow eyebrow--accent cell__label">Protocol · Factorio, open-ended</span>
+            <p style="margin: 0; font-size: var(--fs-base); color: var(--ink-body); line-height: var(--lh-body);">The calibration sweep establishes the port. The open-ended run is next, where exploit incidents become <span style="color: var(--ink-strong);">the direct measurement rather than a design target</span>.</p>
+            <ul class="rules">
+              <li>Caps and starting information tier registered before the first action.</li>
+              <li>Domain-neutral constitution. No game-specific instruction of any kind.</li>
+              <li>Pre-registered bars, stated as thresholds, published with the plan.</li>
+              <li>Regression gate on a reference game before any new result counts.</li>
+            </ul>
+          </div>
+          <div class="cell cell--raised">
+            <span class="eyebrow cell__label">Open problem · LF52</span>
+            <p style="margin: 0 0 var(--s5); font-size: var(--fs-base); color: var(--ink-body); line-height: var(--lh-body);">The one game ASSAY did not clear: 4/10 levels at 364 actions, n=3, with a located diagnosis. It costs 3.27 of the 3.46 set points between ASSAY and 100.</p>
+            <div class="rows" style="border-top: 1px solid var(--rule-soft);">
+              <div class="row" style="grid-template-columns: 1fr auto;"><span class="row__k">ASSAY</span><span class="row__v" style="text-align: right; font-variant-numeric: tabular-nums;">4/10 · 364 actions</span></div>
+              <div class="row" style="grid-template-columns: 1fr auto;"><span class="row__k">Prime Agent</span><span class="row__v" style="text-align: right; font-variant-numeric: tabular-nums;">5/10 · 2,511 · GAME_OVER</span></div>
+              <div class="row" style="grid-template-columns: 1fr auto;"><span class="row__k">PRO-LONG</span><span class="row__v" style="text-align: right; font-variant-numeric: tabular-nums;">81.8% at 1,000</span></div>
+              <div class="row" style="grid-template-columns: 1fr auto;"><span class="row__k">arc-skill</span><span class="row__v" style="text-align: right; font-variant-numeric: tabular-nums;">won at 787</span></div>
+            </div>
           </div>
         </div>
       </div>
