@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #efece6; }
+  a { color: #2d4f8f; text-decoration: none; }
+  a:hover { color: #1a1815; }
+</style>
+</helmet>
+<div style="background:#efece6; color:#1a1815; font-family:'IBM Plex Mono', ui-monospace, monospace; padding:56px 44px 88px; display:flex; flex-direction:column; gap:80px; align-items:center">
+
+  <div style="width:100%; max-width:1800px; display:flex; flex-direction:column; gap:22px">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; font-size:13px; letter-spacing:0.12em; color:#6d6760; text-transform:uppercase; border-bottom:1.4px solid #b8b1a7; padding-bottom:12px">
+      <span>fig. 1 — the loop</span>
+      <span style="color:#b8b1a7">wide · 1800 × 560</span>
+    </div>
+    {{ wide }}
+    <p style="max-width:1180px; margin:8px 0 0; font-size:15px; line-height:1.75; color:#6d6760; text-wrap:pretty">The world is named into channels the agent declares. Claims are graded in code against the world's own response. Misses land in the journal and demote trust. A model that survives grading earns batch execution through code the agent writes. Every step is on the record.</p>
+  </div>
+
+  <div style="width:100%; max-width:1800px; display:flex; flex-direction:column; gap:22px">
+    <div style="display:flex; justify-content:space-between; align-items:baseline; font-size:13px; letter-spacing:0.12em; color:#6d6760; text-transform:uppercase; border-bottom:1.4px solid #b8b1a7; padding-bottom:12px">
+      <span>fig. 1 — the loop</span>
+      <span style="color:#b8b1a7">narrow · 700 × 1520</span>
+    </div>
+    <div style="display:flex; gap:56px; align-items:flex-start">
+      <div style="width:400px; flex:0 0 auto">{{ narrow }}</div>
+      <p style="max-width:520px; margin:0; font-size:14px; line-height:1.8; color:#6d6760; text-wrap:pretty">The world is named into channels the agent declares. Claims are graded in code against the world's own response. Misses land in the journal and demote trust. A model that survives grading earns batch execution through code the agent writes. Every step is on the record.</p>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;hideLabels&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Acceptance check&quot;},&quot;showProbe&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;showTicks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2d4f8f&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#2d4f8f&quot;,&quot;#1a1815&quot;,&quot;#7a5c2e&quot;],&quot;section&quot;:&quot;Content&quot;}}">
+const P = { ground: '#efece6', ink: '#1a1815', muted: '#b8b1a7', mid: '#6d6760' };
+const FONT = "'IBM Plex Mono', ui-monospace, monospace";
+const RACK = [['goal', '\u00b7', 'n'], ['level', '3', 'n'], ['budget', '142', 'n'], ['lever', '1', 'struck'], ['switch3', '2', 'new']];
+const CLAIMS = ['ch switch3 = 2', 'noop', 'verify: hook.py', 'ch level delta = +1'];
+const GRID = ['011010', '100110', '010001', '111010', '001101', '100100'];
+
+class Emit {
+  constructor(){ this.n = []; this.i = 0; }
+  add(tag, props){ this.n.push(React.createElement(tag, Object.assign({ key: 'e' + (this.i++) }, props))); }
+  text(s, x, y, size, color, align, weight){
+    this.n.push(React.createElement('text', {
+      key: 't' + (this.i++), x, y, fill: color, fontFamily: FONT, fontSize: size,
+      fontWeight: weight || 400, textAnchor: align === 'center' ? 'middle' : (align === 'right' ? 'end' : 'start')
+    }, s));
+  }
+  poly(pts, w, color, dash, opacity){
+    this.add('polyline', { points: pts.map(p => p[0] + ',' + p[1]).join(' '), fill: 'none', stroke: color, strokeWidth: w, strokeDasharray: dash || undefined, opacity });
+  }
+  rect(x, y, w, h, stroke, sw, fill, opacity){ this.add('rect', { x, y, width: w, height: h, stroke, strokeWidth: sw, fill: fill || 'none', opacity }); }
+  circle(x, y, r, stroke, sw, dash){ this.add('circle', { cx: x, cy: y, r, fill: 'none', stroke, strokeWidth: sw, strokeDasharray: dash || undefined }); }
+  path(d, w, color, cap){ this.add('path', { d, fill: 'none', stroke: color, strokeWidth: w, strokeLinecap: cap || 'butt' }); }
+  arrow(pts, w, color, dash){
+    this.poly(pts, w, color, dash);
+    const a = pts[pts.length - 2], b = pts[pts.length - 1];
+    const ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+    const h = 5 + w * 2.1;
+    this.add('polygon', { points: '0,0 ' + (-h) + ',' + (h * 0.52) + ' ' + (-h) + ',' + (-h * 0.52), fill: color, transform: 'translate(' + b[0] + ',' + b[1] + ') rotate(' + ang + ')' });
+  }
+  lab(name, cx, y, subs, ns, ss, color){
+    this.text(name, cx, y, ns, color || P.ink, 'center', 500);
+    subs.forEach((s, i) => this.text(s, cx, y + 26 + i * 22, ss, P.mid, 'center'));
+  }
+  labL(name, x, y, subs, ns, ss, color){
+    this.text(name, x, y, ns, color || P.ink, 'left', 500);
+    subs.forEach((s, i) => this.text(s, x, y + 22 + i * 19, ss, P.mid, 'left'));
+  }
+  grid(cx, cy, size){
+    const n = 6, cell = size / n, x0 = cx - size / 2, y0 = cy - size / 2;
+    this.rect(x0, y0, size, size, P.muted, 1.1, 'none', 0.35);
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++)
+      if (GRID[r][c] === '1') this.add('rect', { x: x0 + c * cell + 1, y: y0 + r * cell + 1, width: cell - 2.5, height: cell - 2.5, fill: P.ink, opacity: 0.9 });
+  }
+  rackRow(x, y, w, h, name, val, state, A, size){
+    const isNew = state === 'new', dim = state === 'struck';
+    this.rect(x, y, w, h, isNew ? A : (dim ? P.muted : P.mid), isNew ? 2 : 1.4, 'none', dim ? 0.75 : 1);
+    const base = y + h / 2 + size * 0.36;
+    this.text(name, x + 12, base, size, isNew ? A : (dim ? P.muted : P.ink), 'left', isNew ? 500 : 400);
+    this.text(val, x + w - 12, base, size, isNew ? A : (dim ? P.muted : P.mid), 'right');
+    if (dim) this.poly([[x + 9, y + h / 2], [x + 15 + name.length * size * 0.6, y + h / 2]], 1.3, P.muted);
+  }
+  token(x, y, claim, size){
+    this.circle(x, y, size > 12 ? 12 : 11, P.mid, 1.4, '4 4');
+    this.text(claim, x + 22, y + (size > 12 ? 5 : 4), size, P.mid, 'left');
+  }
+  gate(cx, cy, s, A){
+    const x0 = cx - s / 2, y0 = cy - s / 2, x1 = cx + s / 2, y1 = cy + s / 2, slot = s * 0.24;
+    this.path('M' + x0 + ' ' + y1 + ' L' + x0 + ' ' + y0 + ' L' + x1 + ' ' + y0 + ' L' + x1 + ' ' + y1 +
+      ' M' + x0 + ' ' + y1 + ' L' + (cx - slot) + ' ' + y1 +
+      ' M' + (cx + slot) + ' ' + y1 + ' L' + x1 + ' ' + y1, 2.5, A);
+    this.poly([[x0, y0 + s * 0.2], [x1, y0 + s * 0.2]], 1.8, A);
+    this.poly([[x0 + s * 0.13, y0 + s * 0.36], [cx - slot, y1]], 1.6, A);
+    this.poly([[x1 - s * 0.13, y0 + s * 0.36], [cx + slot, y1]], 1.6, A);
+  }
+  check(x, y, s, A){
+    this.path('M' + (x - s * 0.5) + ' ' + (y + s * 0.1) + ' L' + (x - s * 0.12) + ' ' + (y + s * 0.5) + ' L' + (x + s * 0.55) + ' ' + (y - s * 0.45), 2.2, A, 'round');
+  }
+  cross(x, y, s, c){
+    this.path('M' + (x - s) + ' ' + (y - s) + ' L' + (x + s) + ' ' + (y + s) + ' M' + (x + s) + ' ' + (y - s) + ' L' + (x - s) + ' ' + (y + s), 1.6, c);
+  }
+  code(cx, cy, w, A, bh, bg){
+    const ws = [0.95, 0.62, 1, 0.45], total = ws.length * bh + (ws.length - 1) * bg, x0 = cx - w / 2;
+    let y = cy - total / 2;
+    ws.forEach((f, i) => { this.add('rect', { x: x0, y, width: w * f, height: bh, fill: i === 2 ? A : P.muted }); y += bh + bg; });
+  }
+  journal(B, ticks, showTicks){
+    this.rect(B.x0, B.y0, B.x1 - B.x0, B.y1 - B.y0, P.mid, 1.4);
+    if (showTicks) ticks.forEach(x => this.poly([[x, B.y0 + 7], [x, B.y1 - 7]], 1.2, P.muted, null, 0.4));
+  }
+  hair(x1, y1, x2, y2){ this.poly([[x1, y1], [x2, y2]], 1.1, P.muted); }
+}
+
+class Component extends DCLogic {
+  renderVals(){
+    const o = {
+      A: this.props.accent ?? '#2d4f8f',
+      hideLabels: this.props.hideLabels ?? false,
+      showProbe: this.props.showProbe ?? true,
+      showTicks: this.props.showTicks ?? true
+    };
+    return { wide: this.svg(1800, 560, e => this.wide(e, o)), narrow: this.svg(700, 1300, e => this.narrow(e, o)) };
+  }
+
+  svg(W, H, fn){
+    const e = new Emit();
+    fn(e);
+    return React.createElement('svg', {
+      viewBox: '0 0 ' + W + ' ' + H, width: '100%',
+      style: { display: 'block', width: '100%', height: 'auto', overflow: 'visible' }
+    }, e.n);
+  }
+
+  wide(e, o){
+    const A = o.A, cy = 210;
+    const X = { world: 130, rack: 440, pred: 780, gate: 1090, exec: 1435 };
+    const B = { x0: 60, x1: 1740, y0: 470, y1: 508 };
+
+    if (!o.hideLabels){
+      e.lab('WORLD', X.world, 40, ['raw observation'], 21, 18);
+      e.lab('CHANNELS', X.rack, 40, ['the agent names', 'what it sees'], 21, 18);
+      e.lab('PREDICT', X.pred, 40, ['committed claims,', 'registered before acting'], 21, 18);
+      e.lab('GRADE', X.gate, 40, ['code against the world\u2019s', 'own response'], 21, 18);
+      e.lab('EXECUTE', X.exec, 40, ['earned batches,', 'halt on first miss'], 21, 18);
+    }
+
+    e.grid(X.world, cy, 84);
+
+    const rw = 240, rx = X.rack - rw / 2, rh = 36, gap = 7;
+    let ry = cy - (5 * rh + 4 * gap) / 2;
+    RACK.forEach(r => { e.rackRow(rx, ry, rw, rh, r[0], r[1], r[2], A, 13); ry += rh + gap; });
+    e.arrow([[X.world + 46, cy], [rx - 8, cy]], 1.8, P.mid);
+    e.arrow([[rx + rw + 8, cy], [X.pred - 100, cy]], 1.8, P.mid);
+
+    const tokY = [123, 181, 239, 297];
+    CLAIMS.forEach((c, i) => e.token(700, tokY[i], c, 13));
+
+    const s = 110;
+    tokY.forEach(y => e.hair(885, y, X.gate - s / 2 - 5, cy));
+    e.gate(X.gate, cy, s, A);
+
+    e.arrow([[X.gate + s / 2 + 6, cy], [X.exec - 92, cy]], 2.5, A);
+    e.check(1250, 186, 15, A);
+
+    [[1078, 1060], [1102, 1120]].forEach(pair => {
+      const fx = pair[0], mx = pair[1];
+      e.poly([[fx, cy + s / 2], [mx, 300], [mx, 404]], 1.4, P.mid);
+      e.poly([[mx, 420], [mx, B.y0]], 1.4, P.mid);
+      e.cross(mx, 336, 6, P.mid);
+      e.add('rect', { x: mx - 3, y: 486, width: 6, height: 6, fill: P.mid });
+    });
+
+    e.code(X.exec, cy, 170, A, 13, 13);
+
+    if (o.showProbe){
+      e.arrow([[X.pred, 306], [X.pred, 350], [105, 350], [105, cy + 46]], 1.4, P.muted);
+      if (!o.hideLabels) e.text('probe (paid, one action)', 440, 374, 15, P.mid, 'center');
+    }
+    e.arrow([[X.exec, cy + 46], [X.exec, 412], [155, 412], [155, cy + 46]], 3.4, P.mid);
+
+    e.journal(B, [130, 440, 780, 1090, 1435], o.showTicks);
+    if (!o.hideLabels){
+      e.text('JOURNAL', 60, 452, 21, P.ink, 'left', 500);
+      e.text('every claim, grade, and action, hash-chained', 172, 452, 18, P.mid, 'left');
+      e.text('no action without a prediction.   high grades earn execution.', 900, 546, 16, P.mid, 'center');
+    }
+  }
+
+  narrow(e, o){
+    const A = o.A, sx = 430;
+    const B = { x0: 40, x1: 660, y0: 1120, y1: 1182 }, LX = 110;
+
+    e.grid(sx, 150, 72);
+    if (!o.hideLabels) e.labL('WORLD', LX, 140, ['raw observation'], 19, 15);
+    e.arrow([[sx, 190], [sx, 240]], 1.8, P.mid);
+
+    const rw = 220, rx = sx - rw / 2, rh = 30, gap = 6;
+    let ry = 250;
+    RACK.forEach(r => { e.rackRow(rx, ry, rw, rh, r[0], r[1], r[2], A, 12); ry += rh + gap; });
+    if (!o.hideLabels) e.labL('CHANNELS', LX, 320, ['the agent names', 'what it sees'], 19, 15);
+    e.arrow([[sx, 428], [sx, 476]], 1.8, P.mid);
+
+    const tokY = [500, 538, 576, 614];
+    CLAIMS.forEach((c, i) => e.token(340, tokY[i], c, 12));
+    if (!o.hideLabels) e.labL('PREDICT', LX, 540, ['committed claims,', 'registered', 'before acting'], 19, 15);
+
+    const s = 92, gcy = 714;
+    tokY.forEach(y => e.hair(512, y, sx, gcy - s / 2 - 5));
+    e.gate(sx, gcy, s, A);
+    if (!o.hideLabels) e.labL('GRADE', LX, 700, ['code against the', 'world\u2019s own response'], 19, 15);
+
+    [[418, 56, 830, 890], [442, 76, 860, 942]].forEach(t => {
+      e.poly([[t[0], gcy + s / 2], [t[1], t[2]], [t[1], B.y0]], 1.4, P.mid);
+      e.cross(t[1], t[3], 6, P.mid);
+      e.add('rect', { x: t[1] - 3, y: B.y0 + 25, width: 6, height: 6, fill: P.mid });
+    });
+
+    e.arrow([[sx, gcy + s / 2 + 4], [sx, 886]], 2.5, A);
+    e.check(462, 796, 14, A);
+
+    e.code(sx, 930, 150, A, 10, 12);
+    if (!o.hideLabels) e.labL('EXECUTE', LX, 918, ['earned batches,', 'halt on first miss'], 19, 15);
+
+    if (o.showProbe){
+      e.arrow([[512, 538], [590, 538], [590, 178], [472, 178]], 1.4, P.muted);
+      if (!o.hideLabels){
+        e.text('probe', 584, 462, 11, P.mid, 'right');
+        e.text('(paid, one action)', 584, 478, 11, P.mid, 'right');
+      }
+    }
+    e.arrow([[sx, 972], [sx, 1030], [650, 1030], [650, 150], [472, 150]], 3.2, P.mid);
+
+    e.journal(B, [430, 340, 540], o.showTicks);
+    if (!o.hideLabels){
+      e.text('JOURNAL', LX, 1092, 19, P.ink, 'left', 500);
+      e.text('every claim, grade, and action, hash-chained', LX, 1112, 14, P.mid, 'left');
+      e.text('no action without a prediction.', 350, 1240, 13, P.mid, 'center');
+      e.text('high grades earn execution.', 350, 1260, 13, P.mid, 'center');
+    }
+  }
+}
+
+</script>
+</body>
+</html>

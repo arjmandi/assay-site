@@ -246,6 +246,11 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 .fig canvas { display: block; width: 100%; height: auto; }
 .fig__cap { font-size: var(--fs-micro); color: var(--ink-mute); margin-top: var(--s4); max-width: 68ch; line-height: var(--lh-body); }
 .band--dark .fig__cap { color: var(--dark-mute); }
+@media (max-width: 620px) {
+  /* Fig. 1 carries a title and a stage list; side by side they break
+     mid-phrase on a phone, so give each its own full-width line. */
+  .fig__label { flex-direction: column; align-items: flex-start; gap: var(--s2); }
+}
 
 /* ── data table ────────────────────────────────────────── */
 .tablewrap { overflow-x: auto; border: 1px solid var(--rule); background: var(--raised); }
@@ -423,10 +428,11 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 
       <figure class="fig fig--lead">
         <div class="fig__label">
-          <span class="eyebrow">Fig. 1 — the gate</span>
-          <span class="eyebrow">look → predict → act → grade → record</span>
+          <span class="eyebrow">Fig. 1 — channels and earned execution</span>
+          <span class="eyebrow">world → channels → predict → grade → execute</span>
         </div>
-        <canvas data-fig="gate" width="1800" height="440"></canvas>
+        <canvas data-fig="gate" width="1800" height="560"></canvas>
+        <figcaption class="fig__cap">The world is named into channels the agent declares. Claims are graded in code against the world's own response. Misses land in the journal and demote trust. A model that survives grading earns batch execution through code the agent writes. Every step is on the record.</figcaption>
       </figure>
     </div>
   </section>
@@ -463,7 +469,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       </div>
 
       <div class="block">
-        <span class="eyebrow block__label">What the connected agent does</span>
+        <span class="eyebrow block__label">Once Assay gets connected to a world what it does</span>
         <div class="rows">
           <div class="row">
             <span class="row__k row__k--accent">Discovers its tools</span>
@@ -471,15 +477,15 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           </div>
           <div class="row">
             <span class="row__k row__k--accent">Names what it sees</span>
-            <span class="row__v">It declares typed channels over the raw observation and stakes its claims on them. A channel is never silently redefined. New understanding gets a new name, and the journal keeps both.</span>
+            <span class="row__v">It declares typed channels over the raw observation and stakes its claims on them. (A channel is not silently redefined. New understanding gets a new name, and the journal keeps both.)</span>
           </div>
           <div class="row">
             <span class="row__k row__k--accent">Works goals</span>
-            <span class="row__v">It receives the host&#8217;s goal and breaks it into its own subgoals and plans. It may propose a different goal. It cannot approve its own proposal.</span>
+            <span class="row__v">It receives the host&#8217;s goal and breaks it into its own subgoals and plans. (It may propose a different goal but it cannot approve its own proposal.)</span>
           </div>
           <div class="row">
             <span class="row__k row__k--accent">Learns across runs</span>
-            <span class="row__v">Knowledge exports between runs. An import enters as a foreign hypothesis and is re-earned through graded claims before it is trusted. Graded mechanics and code transfer. Prose plans rot.</span>
+            <span class="row__v">Knowledge exports between runs. An import enters as a foreign hypothesis and is re-earned through graded claims. New runs do not automatically transfer trust, it must be regained. But graded mechanics and code transfer and prose plans expire.</span>
           </div>
           <div class="row">
             <span class="row__k row__k--accent">Stays grounded</span>
@@ -1005,6 +1011,232 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2d4f8f&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#2d4f8f&quot;,&quot;#1f6f5c&quot;,&quot;#8a4b2a&quot;,&quot;#111111&quot;],&quot;section&quot;:&quot;Look&quot;}}">
+  /* ── Fig. 1 — channels and earned execution ─────────────────
+   * Wide (1800×560) and narrow (700×1300) variants of the loop figure.
+   * Drawn on the same canvas the rest of the page uses. Every helper is
+   * fg*-prefixed so nothing here can collide with the other figures.
+   * ──────────────────────────────────── */
+  const fgP = { ground: '#efece6', ink: '#1a1815', muted: '#b8b1a7', mid: '#6d6760', accent: '#2d4f8f' };
+
+  const fgDIMS = { wide: [1800, 560], narrow: [700, 1300] };
+
+  /* ---------------- WIDE 1800 x 560 ---------------- */
+  function fgWide(ctx, opts) {
+    const o = Object.assign({ accent: fgP.accent, showProbe: true, showTicks: true, hideLabels: false }, opts);
+    const A = o.accent, cy = 210;
+    const X = { world: 130, rack: 440, pred: 780, gate: 1090, exec: 1435 };
+    const BAND = { x0: 60, x1: 1740, y0: 470, y1: 508 };
+
+    if (!o.hideLabels) {
+      fgLab(ctx, 'WORLD', X.world, 40, ['raw observation'], 21, 18);
+      fgLab(ctx, 'CHANNELS', X.rack, 40, ['the agent names', 'what it sees'], 21, 18);
+      fgLab(ctx, 'PREDICT', X.pred, 40, ['committed claims,', 'registered before acting'], 21, 18);
+      fgLab(ctx, 'GRADE', X.gate, 40, ['code against the world\u2019s', 'own response'], 21, 18);
+      fgLab(ctx, 'EXECUTE', X.exec, 40, ['earned batches,', 'halt on first miss'], 21, 18);
+    }
+
+    fgGridPatch(ctx, X.world, cy, 84);
+
+    const rw = 240, rx = X.rack - rw / 2, rh = 36, gap = 7;
+    let ry = cy - (5 * rh + 4 * gap) / 2;
+    fgRACK.forEach(r => { fgRackRow(ctx, rx, ry, rw, rh, r[0], r[1], r[2], A, 13); ry += rh + gap; });
+    fgArrow(ctx, [[X.world + 46, cy], [rx - 8, cy]], { w: 1.8 });
+    fgArrow(ctx, [[rx + rw + 8, cy], [X.pred - 100, cy]], { w: 1.8 });
+
+    const tokY = [123, 181, 239, 297];
+    fgCLAIMS.forEach((c, i) => {
+      fgDashCircle(ctx, 700, tokY[i], 12, fgP.mid);
+      fgTxt(ctx, c, 722, tokY[i] + 5, 13, fgP.mid, 'left');
+    });
+
+    const s = 110;
+    tokY.forEach(y => fgHair(ctx, 885, y, X.gate - s / 2 - 5, cy));
+    fgGateGlyph(ctx, X.gate, cy, s, A);
+
+    fgArrow(ctx, [[X.gate + s / 2 + 6, cy], [X.exec - 92, cy]], { w: 2.5, color: A });
+    fgCheck(ctx, 1250, 186, 15, A);
+
+    [[1078, 1060], [1102, 1120]].forEach(([fx, mx]) => {
+      fgLine(ctx, [[fx, cy + s / 2], [mx, 300], [mx, 404]], 1.4, fgP.mid);
+      fgLine(ctx, [[mx, 420], [mx, BAND.y0]], 1.4, fgP.mid);
+      fgCross(ctx, mx, 336, 6, fgP.mid);
+      ctx.fillStyle = fgP.mid; ctx.fillRect(mx - 3, 486, 6, 6);
+    });
+
+    fgCodeBlock(ctx, X.exec, cy, 170, A, 13, 13);
+
+    if (o.showProbe) {
+      fgArrow(ctx, [[X.pred, 306], [X.pred, 350], [105, 350], [105, cy + 46]], { w: 1.4, color: fgP.muted });
+      fgTxt(ctx, 'probe (paid, one action)', 440, 374, 15, fgP.mid, 'center');
+    }
+    fgArrow(ctx, [[X.exec, cy + 46], [X.exec, 412], [155, 412], [155, cy + 46]], { w: 3.4, color: fgP.mid });
+
+    fgJournal(ctx, BAND, [130, 440, 780, 1090, 1435], o.showTicks);
+    if (!o.hideLabels) {
+      fgTxt(ctx, 'JOURNAL', 60, 452, 21, fgP.ink, 'left', 500);
+      fgTxt(ctx, 'every claim, grade, and action, hash-chained', 172, 452, 18, fgP.mid, 'left');
+      fgTxt(ctx, 'no action without a prediction.   high grades earn execution.', 900, 546, 16, fgP.mid, 'center');
+    }
+  }
+
+  /* ---------------- NARROW 700 x 1520 ---------------- */
+  function fgNarrow(ctx, opts) {
+    const o = Object.assign({ accent: fgP.accent, showProbe: true, showTicks: true, hideLabels: false }, opts);
+    const A = o.accent, sx = 430;
+    const BAND = { x0: 40, x1: 660, y0: 1120, y1: 1182 }, LX = 110;
+
+    fgGridPatch(ctx, sx, 150, 72);
+    if (!o.hideLabels) fgLabL(ctx, 'WORLD', LX, 140, ['raw observation'], 19, 15);
+    fgArrow(ctx, [[sx, 190], [sx, 240]], { w: 1.8 });
+
+    const rw = 220, rx = sx - rw / 2, rh = 30, gap = 6;
+    let ry = 250;
+    fgRACK.forEach(r => { fgRackRow(ctx, rx, ry, rw, rh, r[0], r[1], r[2], A, 12); ry += rh + gap; });
+    if (!o.hideLabels) fgLabL(ctx, 'CHANNELS', LX, 320, ['the agent names', 'what it sees'], 19, 15);
+    fgArrow(ctx, [[sx, 428], [sx, 476]], { w: 1.8 });
+
+    const tokY = [500, 538, 576, 614];
+    fgCLAIMS.forEach((c, i) => {
+      fgDashCircle(ctx, 340, tokY[i], 11, fgP.mid);
+      fgTxt(ctx, c, 360, tokY[i] + 4, 12, fgP.mid, 'left');
+    });
+    if (!o.hideLabels) fgLabL(ctx, 'PREDICT', LX, 540, ['committed claims,', 'registered', 'before acting'], 19, 15);
+
+    const s = 92, gcy = 714;
+    tokY.forEach(y => fgHair(ctx, 512, y, sx, gcy - s / 2 - 5));
+    fgGateGlyph(ctx, sx, gcy, s, A);
+    if (!o.hideLabels) fgLabL(ctx, 'GRADE', LX, 700, ['code against the', 'world\u2019s own response'], 19, 15, A);
+
+    [[418, 56, 830, 890], [442, 76, 860, 942]].forEach(([fx, mx, my, cy2]) => {
+      fgLine(ctx, [[fx, gcy + s / 2], [mx, my], [mx, BAND.y0]], 1.4, fgP.mid);
+      fgCross(ctx, mx, cy2, 6, fgP.mid);
+      ctx.fillStyle = fgP.mid; ctx.fillRect(mx - 3, BAND.y0 + 25, 6, 6);
+    });
+
+    fgArrow(ctx, [[sx, gcy + s / 2 + 4], [sx, 886]], { w: 2.5, color: A });
+    fgCheck(ctx, 462, 796, 14, A);
+
+    fgCodeBlock(ctx, sx, 930, 150, A, 10, 12);
+    if (!o.hideLabels) fgLabL(ctx, 'EXECUTE', LX, 918, ['earned batches,', 'halt on first miss'], 19, 15);
+
+    if (o.showProbe) {
+      fgArrow(ctx, [[512, 538], [590, 538], [590, 178], [472, 178]], { w: 1.4, color: fgP.muted });
+      fgTxt(ctx, 'probe', 584, 462, 11, fgP.mid, 'right');
+      fgTxt(ctx, '(paid, one action)', 584, 478, 11, fgP.mid, 'right');
+    }
+    fgArrow(ctx, [[sx, 972], [sx, 1030], [650, 1030], [650, 150], [472, 150]], { w: 3.2, color: fgP.mid });
+
+    fgJournal(ctx, BAND, [430, 340, 540], o.showTicks);
+    if (!o.hideLabels) {
+      fgTxt(ctx, 'JOURNAL', LX, 1092, 19, fgP.ink, 'left', 500);
+      fgTxt(ctx, 'every claim, grade, and action, hash-chained', LX, 1112, 14, fgP.mid, 'left');
+      fgTxt(ctx, 'no action without a prediction.', 350, 1240, 13, fgP.mid, 'center');
+      fgTxt(ctx, 'high grades earn execution.', 350, 1260, 13, fgP.mid, 'center');
+    }
+  }
+
+  /* ---------------- content ---------------- */
+  const fgRACK = [['goal', '\u00b7', 'n'], ['level', '3', 'n'], ['budget', '142', 'n'], ['lever', '1', 'struck'], ['switch3', '2', 'new']];
+  const fgCLAIMS = ['ch switch3 = 2', 'noop', 'verify: hook.py', 'ch level delta = +1'];
+
+  /* ---------------- primitives ---------------- */
+  function fgMono(ctx, size, weight) { ctx.font = (weight || 400) + ' ' + size + 'px "IBM Plex Mono", ui-monospace, monospace'; }
+  function fgTxt(ctx, s, x, y, size, color, align, weight) {
+    fgMono(ctx, size, weight); ctx.fillStyle = color; ctx.textAlign = align || 'left'; ctx.textBaseline = 'alphabetic';
+    ctx.fillText(s, x, y); ctx.textAlign = 'left';
+  }
+  function fgLab(ctx, name, cx, y, subs, ns, ss, color) {
+    fgTxt(ctx, name, cx, y, ns, color || fgP.ink, 'center', 500);
+    subs.forEach((s, i) => fgTxt(ctx, s, cx, y + 26 + i * 22, ss, fgP.mid, 'center'));
+  }
+  function fgLabL(ctx, name, x, y, subs, ns, ss, color) {
+    fgTxt(ctx, name, x, y, ns, color || fgP.ink, 'left', 500);
+    subs.forEach((s, i) => fgTxt(ctx, s, x, y + 22 + i * 19, ss, fgP.mid, 'left'));
+  }
+  function fgLine(ctx, pts, w, color, dash) {
+    ctx.save(); ctx.lineWidth = w; ctx.strokeStyle = color; if (dash) ctx.setLineDash(dash);
+    ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.stroke(); ctx.restore();
+  }
+  function fgArrow(ctx, pts, opts) {
+    const w = (opts && opts.w) || 1.6, color = (opts && opts.color) || fgP.mid;
+    fgLine(ctx, pts, w, color, opts && opts.dash);
+    const a = pts[pts.length - 2], b = pts[pts.length - 1];
+    const ang = Math.atan2(b[1] - a[1], b[0] - a[0]), h = 5 + w * 2.1;
+    ctx.save(); ctx.fillStyle = color; ctx.translate(b[0], b[1]); ctx.rotate(ang);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-h, h * 0.52); ctx.lineTo(-h, -h * 0.52); ctx.closePath(); ctx.fill(); ctx.restore();
+  }
+  function fgHair(ctx, x1, y1, x2, y2) { fgLine(ctx, [[x1, y1], [x2, y2]], 1.1, fgP.muted); }
+  function fgDashCircle(ctx, x, y, r, color) {
+    ctx.save(); ctx.setLineDash([4, 4]); ctx.lineWidth = 1.4; ctx.strokeStyle = color;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.stroke(); ctx.restore();
+  }
+  const fgGRID = ['011010', '100110', '010001', '111010', '001101', '100100'];
+  function fgGridPatch(ctx, cx, cy, size) {
+    const n = 6, cell = size / n, x0 = cx - size / 2, y0 = cy - size / 2;
+    ctx.save(); ctx.globalAlpha = 0.9; ctx.fillStyle = fgP.ink;
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++)
+      if (fgGRID[r][c] === '1') ctx.fillRect(x0 + c * cell + 1, y0 + r * cell + 1, cell - 2.5, cell - 2.5);
+    ctx.restore();
+    ctx.save(); ctx.globalAlpha = 0.35; ctx.strokeStyle = fgP.muted; ctx.lineWidth = 1.1;
+    ctx.strokeRect(x0, y0, size, size); ctx.restore();
+  }
+  function fgRackRow(ctx, x, y, w, h, name, val, state, A, fs) {
+    const size = fs || 13, isNew = state === 'new', dim = state === 'struck';
+    ctx.save();
+    ctx.lineWidth = isNew ? 2 : 1.4;
+    ctx.strokeStyle = isNew ? A : (dim ? fgP.muted : fgP.mid);
+    if (dim) ctx.globalAlpha = 0.75;
+    ctx.strokeRect(x, y, w, h); ctx.restore();
+    const col = isNew ? A : (dim ? fgP.muted : fgP.ink);
+    fgTxt(ctx, name, x + 12, y + h / 2 + size * 0.36, size, col, 'left', isNew ? 500 : 400);
+    fgTxt(ctx, val, x + w - 12, y + h / 2 + size * 0.36, size, isNew ? A : (dim ? fgP.muted : fgP.mid), 'right');
+    if (dim) {
+      fgMono(ctx, size, 400);
+      const nw = ctx.measureText(name).width;
+      fgLine(ctx, [[x + 9, y + h / 2], [x + 15 + nw, y + h / 2]], 1.3, fgP.muted);
+    }
+  }
+  function fgGateGlyph(ctx, cx, cy, s, A) {
+    const x0 = cx - s / 2, y0 = cy - s / 2, x1 = cx + s / 2, y1 = cy + s / 2, slot = s * 0.24;
+    ctx.save(); ctx.strokeStyle = A; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(x0, y1); ctx.lineTo(x0, y0); ctx.lineTo(x1, y0); ctx.lineTo(x1, y1);
+    ctx.moveTo(x0, y1); ctx.lineTo(cx - slot, y1);
+    ctx.moveTo(cx + slot, y1); ctx.lineTo(x1, y1);
+    ctx.stroke();
+    ctx.lineWidth = 1.8; ctx.beginPath(); ctx.moveTo(x0, y0 + s * 0.2); ctx.lineTo(x1, y0 + s * 0.2); ctx.stroke();
+    ctx.lineWidth = 1.6; ctx.beginPath();
+    ctx.moveTo(x0 + s * 0.13, y0 + s * 0.36); ctx.lineTo(cx - slot, y1);
+    ctx.moveTo(x1 - s * 0.13, y0 + s * 0.36); ctx.lineTo(cx + slot, y1);
+    ctx.stroke(); ctx.restore();
+  }
+  function fgCheck(ctx, x, y, s, A) {
+    ctx.save(); ctx.strokeStyle = A; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(x - s * 0.5, y + s * 0.1); ctx.lineTo(x - s * 0.12, y + s * 0.5); ctx.lineTo(x + s * 0.55, y - s * 0.45);
+    ctx.stroke(); ctx.restore();
+  }
+  function fgCross(ctx, x, y, s, c) {
+    ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(x - s, y - s); ctx.lineTo(x + s, y + s); ctx.moveTo(x + s, y - s); ctx.lineTo(x - s, y + s);
+    ctx.stroke(); ctx.restore();
+  }
+  function fgCodeBlock(ctx, cx, cy, w, A, bh, bg) {
+    const ws = [0.95, 0.62, 1, 0.45], total = ws.length * bh + (ws.length - 1) * bg, x0 = cx - w / 2;
+    let y = cy - total / 2;
+    ws.forEach((f, i) => { ctx.fillStyle = i === 2 ? A : fgP.muted; ctx.fillRect(x0, y, w * f, bh); y += bh + bg; });
+  }
+  function fgJournal(ctx, B, ticks, showTicks) {
+    ctx.save(); ctx.strokeStyle = fgP.mid; ctx.lineWidth = 1.4;
+    ctx.strokeRect(B.x0, B.y0, B.x1 - B.x0, B.y1 - B.y0); ctx.restore();
+    if (showTicks) {
+      ctx.save(); ctx.globalAlpha = 0.4; ctx.strokeStyle = fgP.muted; ctx.lineWidth = 1.2;
+      ticks.forEach(x => { ctx.beginPath(); ctx.moveTo(x, B.y0 + 7); ctx.lineTo(x, B.y1 - 7); ctx.stroke(); });
+      ctx.restore();
+    }
+  }
+
 class Component extends DCLogic {
   componentDidMount() {
     this.draw();
@@ -1025,7 +1257,7 @@ class Component extends DCLogic {
     // Each figure has a wide and a narrow logical canvas. Because the canvas is
     // CSS-scaled to 100% width, a smaller logical box = relatively larger labels.
     const DIMS = {
-      gate:      { wide: [1800, 440], narrow: [660, 1240] },
+      gate:      fgDIMS,
       tax:       { wide: [1000, 480], narrow: [660, 460] },
       triple:    { wide: [1000, 480], narrow: [660, 520] },
       grid:      { wide: [900, 900],  narrow: [660, 660] },
@@ -1053,114 +1285,9 @@ class Component extends DCLogic {
   rng(seed) { let s = seed; return () => (s = (s * 1664525 + 1013904223) % 4294967296) / 4294967296; }
 
   fig_gate(ctx, W, H, narrow) {
-    if (narrow) return this.fig_gate_v(ctx, W, H);
-    const A = this.ink(), INK = '#1a1815', MUTE = '#b8b1a7';
-    const labels = ['LOOK', 'PREDICT', 'ACT', 'GRADE', 'RECORD'];
-    const n = 5, pad = 150, span = W - pad * 2, cy = H * 0.44;
-    const xs = labels.map((_, i) => pad + (span * i) / (n - 1));
-    ctx.lineWidth = 2;
-    // connecting spine
-    for (let i = 0; i < n - 1; i++) {
-      const x1 = xs[i] + 46, x2 = xs[i + 1] - 46;
-      ctx.strokeStyle = MUTE; ctx.beginPath(); ctx.moveTo(x1, cy); ctx.lineTo(x2 - 12, cy); ctx.stroke();
-      ctx.fillStyle = MUTE; ctx.beginPath();
-      ctx.moveTo(x2, cy); ctx.lineTo(x2 - 13, cy - 7); ctx.lineTo(x2 - 13, cy + 7); ctx.closePath(); ctx.fill();
-    }
-    // return arc: note -> look
-    ctx.strokeStyle = MUTE; ctx.setLineDash([6, 7]); ctx.beginPath();
-    ctx.moveTo(xs[4], cy + 46); ctx.bezierCurveTo(xs[4], cy + 190, xs[0], cy + 190, xs[0], cy + 58);
-    ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = MUTE; ctx.beginPath();
-    ctx.moveTo(xs[0], cy + 46); ctx.lineTo(xs[0] - 7, cy + 60); ctx.lineTo(xs[0] + 7, cy + 60); ctx.closePath(); ctx.fill();
-    labels.forEach((lab, i) => {
-      const x = xs[i], gated = i === 2;
-      ctx.save();
-      if (gated) {
-        // the gate: a slot the action must pass through
-        ctx.strokeStyle = A; ctx.lineWidth = 2.5;
-        ctx.strokeRect(x - 44, cy - 44, 88, 88);
-        ctx.beginPath(); ctx.moveTo(x - 44, cy - 12); ctx.lineTo(x + 44, cy - 12); ctx.stroke();
-        ctx.fillStyle = A;
-        for (let k = 0; k < 4; k++) ctx.fillRect(x - 30 + k * 18, cy + 4, 8, 22);
-      } else {
-        ctx.strokeStyle = INK; ctx.lineWidth = 1.6;
-        ctx.beginPath(); ctx.arc(x, cy, 42, 0, Math.PI * 2); ctx.stroke();
-        if (i === 3) { // grade: a tick
-          ctx.strokeStyle = A; ctx.lineWidth = 3;
-          ctx.beginPath(); ctx.moveTo(x - 16, cy + 1); ctx.lineTo(x - 4, cy + 14); ctx.lineTo(x + 18, cy - 15); ctx.stroke();
-        } else if (i === 0) { // look: scanning bars
-          ctx.strokeStyle = INK; ctx.lineWidth = 1.4;
-          for (let k = -2; k <= 2; k++) { const w = 26 - Math.abs(k) * 7; ctx.beginPath(); ctx.moveTo(x - w, cy + k * 10); ctx.lineTo(x + w, cy + k * 10); ctx.stroke(); }
-        } else if (i === 1) { // predict: a hollow target ahead of the fact
-          ctx.strokeStyle = A; ctx.lineWidth = 1.6; ctx.setLineDash([4, 4]);
-          ctx.beginPath(); ctx.arc(x, cy, 19, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
-          ctx.fillStyle = A; ctx.beginPath(); ctx.arc(x, cy, 4.5, 0, Math.PI * 2); ctx.fill();
-        } else { // note: stacked ledger lines
-          ctx.strokeStyle = INK; ctx.lineWidth = 1.4;
-          for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(x - 22, cy + k * 9 + 2); ctx.lineTo(x + 22 - (k === 2 ? 14 : 0), cy + k * 9 + 2); ctx.stroke(); }
-        }
-      }
-      ctx.restore();
-      ctx.fillStyle = gated ? A : '#6d6760';
-      ctx.font = '500 21px "IBM Plex Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(lab, x, cy - 74);
-    });
-    ctx.fillStyle = '#a9a29a';
-    ctx.font = '18px "IBM Plex Mono", monospace';
-    ctx.textAlign = 'center';
-    ctx.fillText('no prediction, no action', xs[2], cy + 232);
-  }
-
-  fig_gate_v(ctx, W, H) {
-    const A = this.ink(), INK = '#1a1815', MUTE = '#b8b1a7';
-    const labels = ['LOOK', 'PREDICT', 'ACT', 'GRADE', 'RECORD'];
-    const cx = W * 0.44, top = 90, step = (H - 200) / 4;
-    ctx.lineWidth = 2;
-    for (let i = 0; i < 4; i++) {
-      const y1 = top + i * step + 46, y2 = top + (i + 1) * step - 46;
-      ctx.strokeStyle = MUTE; ctx.beginPath(); ctx.moveTo(cx, y1); ctx.lineTo(cx, y2 - 12); ctx.stroke();
-      ctx.fillStyle = MUTE; ctx.beginPath();
-      ctx.moveTo(cx, y2); ctx.lineTo(cx - 7, y2 - 13); ctx.lineTo(cx + 7, y2 - 13); ctx.closePath(); ctx.fill();
-    }
-    const yLast = top + 4 * step, edge = W - 34;
-    ctx.strokeStyle = MUTE; ctx.setLineDash([6, 7]); ctx.beginPath();
-    ctx.moveTo(cx + 46, yLast); ctx.bezierCurveTo(edge, yLast, edge, top, cx + 58, top);
-    ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = MUTE; ctx.beginPath();
-    ctx.moveTo(cx + 46, top); ctx.lineTo(cx + 60, top - 7); ctx.lineTo(cx + 60, top + 7); ctx.closePath(); ctx.fill();
-    labels.forEach((lab, i) => {
-      const y = top + i * step, gated = i === 2;
-      if (gated) {
-        ctx.strokeStyle = A; ctx.lineWidth = 2.5;
-        ctx.strokeRect(cx - 42, y - 42, 84, 84);
-        ctx.beginPath(); ctx.moveTo(cx - 42, y - 12); ctx.lineTo(cx + 42, y - 12); ctx.stroke();
-        ctx.fillStyle = A;
-        for (let k = 0; k < 4; k++) ctx.fillRect(cx - 29 + k * 17, y + 4, 8, 20);
-      } else {
-        ctx.strokeStyle = INK; ctx.lineWidth = 1.6;
-        ctx.beginPath(); ctx.arc(cx, y, 40, 0, Math.PI * 2); ctx.stroke();
-        if (i === 3) {
-          ctx.strokeStyle = A; ctx.lineWidth = 3;
-          ctx.beginPath(); ctx.moveTo(cx - 15, y + 1); ctx.lineTo(cx - 3, y + 13); ctx.lineTo(cx + 17, y - 14); ctx.stroke();
-        } else if (i === 0) {
-          for (let k = -2; k <= 2; k++) { const w = 25 - Math.abs(k) * 7; ctx.beginPath(); ctx.moveTo(cx - w, y + k * 10); ctx.lineTo(cx + w, y + k * 10); ctx.stroke(); }
-        } else if (i === 1) {
-          ctx.strokeStyle = A; ctx.setLineDash([4, 4]);
-          ctx.beginPath(); ctx.arc(cx, y, 18, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]);
-          ctx.fillStyle = A; ctx.beginPath(); ctx.arc(cx, y, 4.5, 0, Math.PI * 2); ctx.fill();
-        } else {
-          for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(cx - 21, y + k * 9 + 2); ctx.lineTo(cx + 21 - (k === 2 ? 13 : 0), y + k * 9 + 2); ctx.stroke(); }
-        }
-      }
-      ctx.fillStyle = gated ? A : '#6d6760';
-      ctx.font = '500 21px "IBM Plex Mono", monospace';
-      ctx.textAlign = 'left';
-      ctx.fillText(lab, 8, y - 52);
-    });
-    ctx.fillStyle = '#a9a29a';
-    ctx.font = '19px "IBM Plex Mono", monospace'; ctx.textAlign = 'left';
-    ctx.fillText('no prediction, no action', 8, H - 22);
+    // Wide for desktop, narrow for phones; both live in the fg* block above.
+    const o = { accent: this.ink(), showProbe: true, showTicks: true, hideLabels: false };
+    if (narrow) fgNarrow(ctx, o); else fgWide(ctx, o);
   }
 
   fig_tax(ctx, W, H, narrow) {
