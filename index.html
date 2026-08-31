@@ -736,11 +736,13 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <div class="shead">
         <span class="shead__num">05</span>
         <div>
-          <h2 class="h2">ARC AGI 3: Case study of broken proofs</h2>
-          <p class="lede">On six occasions the agent proved a level impossible. Every proof was consistent with its recorded transition. Every proof was wrong but wrong precisely where no transition had ever gone. </p>
+          <h2 class="h2">Add new behavioral patterns</h2>
+          <p class="lede">Assay allows to pin goals or behavioral patterns that can help in this spicifc world to be entered at start. If in a world you need different search approaches (DFS, BFS, etc) or more general reasoning patterns can be plugged in this way. This feature is not to add world-specific code to the harness but in this architecture that every action is gained via prediction, it's important to treat any agent-side impossibility as a trigger to audit the proof's unexercised rules. “Provably unsolvable” is a property of a model, not a world and if captured a new behavior can be added like a protocol without adjusting the core logic or axioms.</p>
         </div>
       </div>
-
+      <span class="eyebrow block__label">ARC AGI 3: Adding new behaviors to harness  </span>
+      <p class="note note--body">On six occasions the agent proved a level impossible and while every proof was consistent with its recorded transition, all these proofs were of the exact same pattern: they were logically wrong on a decision that no transition had ever traversed. When facing this issue we didn't change the core logic and plugged a new behavior which converted five of the six fails to wins inside their existing action budgets while keeping the harness generality. </p>
+      <p></p>
       <div class="split split--wide" style="margin-bottom: var(--s8);">
         <figure class="fig">
           <div class="fig__label"><span class="eyebrow">Fig. 6 — exercised vs. unexercised</span></div>
@@ -787,11 +789,11 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         </div>
       </div>
 
-      <p class="note note--body">Five of the six converted to wins inside their existing action budgets. The audit step is cheap because it runs offline over the journal. The sixth remains open (roadmap).</p>
+
 
       <div class="panel">
         <div class="panel__head">
-          <span class="eyebrow eyebrow--accent">The protocol</span>
+          <span class="eyebrow eyebrow--accent">A new behavior is plugged:</span>
           <h3 class="h3">Coverage audit</h3>
         </div>
         <div class="panel__grid">
@@ -808,7 +810,6 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
             <div class="cell__body">Buy graded probes for the gaps (ordered by cost).</div>
           </div>
         </div>
-        <div class="panel__foot">“Provably unsolvable” is a property of a model, not a world. Treat any agent-side impossibility as a trigger to audit the proof's unexercised rules.</div>
       </div>
     </div>
   </section>
@@ -965,7 +966,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
               <li>Caps and starting information tier registered before the first action.</li>
               <li>Domain-neutral constitution. No game-specific instruction of any kind.</li>
               <li>Pre-registered bars, stated as thresholds, published with the plan.</li>
-              <li>Regression gate on a reference game before any new result counts.</li>
+              <li>Regression gate on a reference game before any new result.</li>
             </ul>
           </div>
           <div class="cell cell--raised">
@@ -988,8 +989,8 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
     <div class="wrap">
       <div class="split">
         <div>
-          <h2 class="h2" style="font-weight: 300;">by Mohsen Arjmandi</h2>
-          <p style="margin: var(--s5) 0 var(--s7); font-size: var(--fs-lede); color: var(--dark-body); max-width: 56ch; line-height: var(--lh-body);">Independent researcher building agents that reason their way through unfamiliar worlds, learn them from interaction, and improve across runs. The discipline that makes them reason is the same discipline that makes every run auditable. <a href="https://freddiespirit.com" style="color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4); white-space: nowrap;">Other works</a></p>
+          <h2 class="h2" style="font-weight: 300;">Author here:</h2>
+          <p style="margin: var(--s5) 0 var(--s7); font-size: var(--fs-lede); color: var(--dark-body); max-width: 56ch; line-height: var(--lh-body);">Hi, I'm Mohsen Arjmandi, an independent researcher building agents that reason their way through unfamiliar worlds, learn them from interaction, and improve across runs.  <a href="https://freddiespirit.com" style="color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4); white-space: nowrap;">more here → </a></p>
 
           <div class="btns">
             <a class="btn btn--solid" href="mailto:mohsen.arjmandi@gmail.com">Email</a>
@@ -999,13 +1000,12 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         </div>
         <div style="border: 1px solid var(--dark-rule); background: var(--dark-sunk); padding: var(--s5);">
           <span class="eyebrow eyebrow--accent" style="display: block; margin-bottom: var(--s4);">For labs &amp; safety institutes</span>
-          <p style="margin: 0 0 var(--s5); font-size: var(--fs-base); color: var(--dark-body); line-height: var(--lh-body);">Reasoning, test-time learning, verified autonomy. I build agents that can prove what they did.</p>
+          <p style="margin: 0 0 var(--s5); font-size: var(--fs-base); color: var(--dark-body); line-height: var(--lh-body);">I'd love to get in touch and discuss projects that assay can help in improving reasoning, test-time learning, verified autonomy. Drop me an email if you're interested. </p>
           <a href="mailto:mohsen.arjmandi@gmail.com?subject=ASSAY%20research%20access" style="font-size: var(--fs-sm); color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4);">Request access →</a>
         </div>
       </div>
       <div class="foot">
-        <span>ASSAY · preprint 2026 · every figure on this page is drawn from the journals</span>
-        <span>n=1 throughout, and labelled as such</span>
+        <span>ASSAY · preprint 2026 </span>
       </div>
     </div>
   </section>
