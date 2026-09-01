@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy — ASSAY</title>
+<meta name="description" content="What this site measures and what it does not. No cookies, no tracking between sessions, no consent banner." />
+<meta name="robots" content="noindex" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="page">
+
+  <div class="nav">
+    <div class="nav__brand">
+      <span class="nav__mark"></span>
+      <span class="nav__name">ASSAY</span>
+      <span class="nav__sep">/</span>
+      <span class="nav__tag">privacy</span>
+    </div>
+    <div class="nav__links">
+      <a href="./index.html">← Back to ASSAY</a>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="shead">
+        <span class="shead__num">§</span>
+        <div>
+          <h1 class="h2">Privacy</h1>
+          <p class="lede">This page sets no cookies, stores nothing on your device, and does not follow you between visits — which is why there is no consent banner to click away. What it does collect is below, in full.</p>
+        </div>
+      </div>
+
+      <div class="prose">
+
+        <div class="psec">
+          <span class="eyebrow">Who is responsible</span>
+          <p>Mohsen Arjmandi, independent researcher. Contact: <a href="mailto:mohsen.arjmandi@gmail.com">mohsen.arjmandi@gmail.com</a>. I am the controller for the processing described here, within the meaning of Art. 4(7) GDPR.</p>
+        </div>
+
+        <div class="psec">
+          <span class="eyebrow">What this site measures</span>
+          <p>Visits are counted with <a href="https://www.goatcounter.com" target="_blank" rel="noopener">GoatCounter</a>, an open-source analytics service. It sets <strong>no cookies</strong> and writes nothing to your browser's local storage, so §25 TDDDG — the provision behind cookie banners — does not apply.</p>
+          <p>For each page view it records the page address, the referring page if you arrived from a link, your browser and operating system as reported by your user agent, your screen size, and a country derived from your IP address. It also records when you follow one of the outbound links on the landing page — the paper, the scorecard, the verification repository, the lineage papers and posts, the contact buttons — and when you open one of the lineage entries. That tells me which parts of the work people actually look at. <strong>This privacy page itself carries no analytics at all</strong> — reading it is not counted.</p>
+          <p><strong>Your IP address is not stored.</strong> It is used to derive the country and then discarded. To avoid double-counting one person as several visitors, GoatCounter combines the IP address and user agent into a hash with a secret that changes regularly; the hash cannot be reversed and stops matching once the secret rotates. There is no identifier that persists across sessions, so I cannot tell that a visitor has returned, and I cannot connect a visit to a person.</p>
+          <p>The legal basis is Art. 6(1)(f) GDPR. My legitimate interest is knowing whether this research reaches anyone and which parts of it are read; the analytics are configured so that this interest is served without identifying anybody. GoatCounter's own privacy statement is at <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener">goatcounter.com/help/privacy</a>.</p>
+        </div>
+
+        <div class="psec">
+          <span class="eyebrow">Hosting</span>
+          <p>The site is hosted on GitHub Pages, a service of GitHub, Inc. (San Francisco, USA). Serving a page necessarily transmits your IP address to GitHub's servers, and GitHub records it in its own server logs for security and abuse prevention. I have no access to those logs and cannot switch them off. GitHub's privacy statement is at <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">docs.github.com</a>. The legal basis for the transfer inherent in delivering the page is Art. 6(1)(f) GDPR.</p>
+        </div>
+
+        <div class="psec">
+          <span class="eyebrow">Resources loaded from other services</span>
+          <p>To render, the page currently fetches two things from third parties, which means your IP address reaches them:</p>
+          <p><strong>Google Fonts</strong> — the typefaces are requested from <code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>, operated by Google Ireland Limited. <strong>unpkg</strong> — the page's rendering library is requested from <code>unpkg.com</code>.</p>
+          <p>Neither is necessary. Both will be replaced by files served from this site, at which point this section will say so and no third party will see your address for a page view.</p>
+        </div>
+
+        <div class="psec">
+          <span class="eyebrow">Links out</span>
+          <p>The page links to Zenodo, arXiv, ARC Prize, GitHub, Substack and X. Nothing is sent to any of them until you click, and once you do, that site's own privacy terms apply, not this one.</p>
+        </div>
+
+        <div class="psec">
+          <span class="eyebrow">Email</span>
+          <p>There is no form, no account and no newsletter on this site. The contact buttons open your own mail program; nothing is transmitted to me unless you send a message yourself. If you do write, I keep the message and your address for as long as it takes to deal with what you wrote about, on the basis of Art. 6(1)(f) or, where we are discussing an agreement, Art. 6(1)(b) GDPR.</p>
+        </div>
+
+        <div class="psec">
+          <span class="eyebrow">Your rights</span>
+          <p>You have the right to obtain confirmation of whether data concerning you is processed and to access it (Art. 15), to have it corrected (Art. 16) or erased (Art. 17), to have processing restricted (Art. 18), to receive it in a portable form (Art. 20), and <strong>to object at any time to processing based on legitimate interest, including the analytics described above (Art. 21)</strong>. Write to the address at the top of this page.</p>
+          <p>In practice, an access request about the analytics will find nothing: because no identifier survives a session and IP addresses are not stored, there is no record I could retrieve or delete that relates to you specifically. That is the point of the design.</p>
+          <p>If you would rather not be counted at all, any content blocker that blocks <code>gc.zgo.at</code> will stop it, as will your browser's Do Not Track setting, which GoatCounter honours. You also have the right to complain to a data protection supervisory authority, in the member state of your habitual residence, your place of work, or the place of the alleged infringement (Art. 77).</p>
+        </div>
+
+        <div class="psec">
+          <span class="eyebrow">Changes</span>
+          <p>If what the site collects changes, this page changes with it. Its full history is public in the repository, so any edit can be seen and dated.</p>
+          <p class="updated">Last updated: 1 September 2026</p>
+        </div>
+
+        <a class="pback" href="./index.html">← Back to ASSAY</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
