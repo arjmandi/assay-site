@@ -163,7 +163,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 
 .eyebrow { font-size: var(--fs-label); letter-spacing: var(--ls-caps); text-transform: uppercase; color: var(--ink-mute); }
 .eyebrow--accent { color: var(--accent); }
-.band--dark .eyebrow { color: var(--dark); }
+.band--dark .eyebrow { color: var(--dark-mute); }
 .band--dark .eyebrow--accent { color: var(--accent-lift); }
 .eyebrow.block__label { font-size: var(--fs-lede); }
 
