@@ -6,9 +6,8 @@
 <title>Privacy — ASSAY</title>
 <meta name="description" content="What this site measures and what it does not. No cookies, no tracking between sessions, no consent banner." />
 <meta name="robots" content="noindex" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="./fonts/ibm-plex-mono-latin-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="./fonts/newsreader-latin-var.woff2">
 <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -58,9 +57,8 @@
 
         <div class="psec">
           <span class="eyebrow">Resources loaded from other services</span>
-          <p>To render, the page currently fetches two things from third parties, which means your IP address reaches them:</p>
-          <p><strong>Google Fonts</strong> — the typefaces are requested from <code>fonts.googleapis.com</code> and <code>fonts.gstatic.com</code>, operated by Google Ireland Limited. <strong>unpkg</strong> — the page's rendering library is requested from <code>unpkg.com</code>.</p>
-          <p>Neither is necessary. Both will be replaced by files served from this site, at which point this section will say so and no third party will see your address for a page view.</p>
+          <p>The typefaces are served from this site, not from Google Fonts, so rendering a page does not hand your IP address to a font provider.</p>
+          <p>One third-party request remains: the landing page fetches its rendering library from <strong>unpkg</strong>, a CDN, which means your IP address reaches that service. It is not needed either, and it will go the same way as the fonts. This privacy page does not load it at all.</p>
         </div>
 
         <div class="psec">

@@ -1,3 +1,32 @@
+/* ── faces ─────────────────────────────────────────────────────────
+   Self-hosted, so rendering a page contacts no one but this origin.
+   Latin subsets only, and only the weights the page uses: Newsreader
+   as a variable font for display, IBM Plex Mono at 400 and 500. No
+   italics — the design uses none. Both are SIL Open Font License;
+   see fonts/LICENSE-*.txt.
+   ───────────────────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Newsreader';
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: swap;
+  src: url('./fonts/newsreader-latin-var.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/ibm-plex-mono-latin-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./fonts/ibm-plex-mono-latin-500.woff2') format('woff2');
+}
+
 /* ─────────────────────────────────────────────────────────────
    ASSAY — design tokens
    Two faces: Newsreader for display, IBM Plex Mono for the
