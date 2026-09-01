@@ -8,6 +8,67 @@
 <meta property="og:title" content="ASSAY — the referee harness" />
 <meta property="og:description" content="The agent proposes, the referee disposes. Verified frontier performance on ARC-AGI-3 at a measured 8% integrity overhead." />
 <script src="./support.js"></script>
+<script>
+/* ── Analytics: GoatCounter ─────────────────────────────────────────
+   Cookieless by design: no cookie, no localStorage, nothing written to
+   or read from the visitor's device, so §25 TDDDG consent — the cookie
+   banner — does not apply. Visits are counted, visitors are not
+   followed between sessions.
+
+   Set SITE to the code from your GoatCounter dashboard, e.g. 'assay'
+   for https://assay.goatcounter.com. While it is empty nothing loads
+   and nothing is sent.
+   ──────────────────────────────────────────────────────────────────── */
+(function () {
+  var SITE = '';   /* ← your GoatCounter code goes here */
+  if (!SITE) return;
+
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://gc.zgo.at/count.js';
+  s.setAttribute('data-goatcounter', 'https://' + SITE + '.goatcounter.com/count');
+  document.head.appendChild(s);
+
+  /* No-ops if count.js was blocked, so a blocker never breaks a click. */
+  function track(name) {
+    if (window.goatcounter && window.goatcounter.count) {
+      window.goatcounter.count({ path: name, title: name, event: true });
+    }
+  }
+
+  /* One delegated listener rather than a handler per link, so events
+     survive re-renders and new links are picked up for free. Links
+     carrying data-gc report under that name; any other outbound link
+     reports under its host. Internal anchors are not counted. */
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var name = a.getAttribute('data-gc');
+    if (!name) {
+      var href = a.getAttribute('href') || '';
+      if (href.slice(0, 7) === 'mailto:') { name = 'mailto'; }
+      else if (/^https?:/i.test(href)) {
+        try {
+          var u = new URL(href, location.href);
+          if (u.host === location.host) return;
+          name = 'outbound-' + u.host.replace(/^www\./, '');
+        } catch (err) { return; }
+      } else { return; }
+    }
+    track(name);
+  }, true);
+
+  /* Opening a lineage entry is the one non-link signal worth keeping:
+     it says which piece of prior work drew someone in. The toggle event
+     does not bubble, so this listens in the capture phase. */
+  document.addEventListener('toggle', function (e) {
+    var d = e.target;
+    if (!d || d.tagName !== 'DETAILS' || !d.open) return;
+    var name = d.getAttribute('data-gc');
+    if (name) track(name);
+  }, true);
+})();
+</script>
 </head>
 <body>
 <x-dc>
@@ -392,7 +453,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           <h1 class="h1">The agent proposes,<br />the referee disposes.</h1>
           <p style="margin: 0 0 var(--s7); max-width: 46ch; color: var(--ink-body); font-size: var(--fs-lede);">A general agent under a referee. In any world you connect, the agent discovers what its tools do, works its goal into subgoals and internalizes what it learns. The referee makes it predict before it acts, grades every prediction in code and keeps everything on the record. First benchmark: frontier performance on ARC-AGI-3, along with its audit trail.</p>
           <div class="btns">
-            <a class="btn btn--solid" href="./uploads/preprint.pdf">Read the paper</a>
+            <a class="btn btn--solid" href="./uploads/preprint.pdf" data-gc="paper-hero" target="_blank" rel="noopener">Read the paper</a>
             <a class="btn btn--ghost" href="#audit">Audit a run</a>
           </div>
         </div>
@@ -411,7 +472,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           <div class="stat__row"><span>Exploration tax</span><span class="stat__val">8.0%</span></div>
           <div class="stat__row"><span>Wins verified</span><span class="stat__val">3 ways, all 24</span></div>
           <div class="stat__foot">
-            <a href="https://arcprize.org/scorecards/702ccd4f-df1f-4118-bc8b-d79d3f4a1a32">Public scorecard 702ccd4f →</a>
+            <a href="https://arcprize.org/scorecards/702ccd4f-df1f-4118-bc8b-d79d3f4a1a32" data-gc="scorecard-hero" target="_blank" rel="noopener">Public scorecard 702ccd4f →</a>
           </div>
         </div>
       </div>
@@ -559,9 +620,9 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
         <span class="eyebrow" style="display: block; margin-bottom: var(--s4);">Replay it</span>
         <p style="margin: 0 0 var(--s5); font-size: var(--fs-base); color: var(--ink-body); max-width: 76ch;">The consolidated verification replay of all 25 recorded action sequences is a public ARC scorecard. Per-game action counts and per-level outcomes are on the card.</p>
         <div style="display: flex; flex-wrap: wrap; gap: var(--s3) var(--s5); font-size: var(--fs-sm); align-items: baseline;">
-          <a href="https://arcprize.org/scorecards/702ccd4f-df1f-4118-bc8b-d79d3f4a1a32">Scorecard 702ccd4f</a>
-          <a href="https://github.com/arjmandi/assay-verify/blob/main/evidence/arcagi/rhae.py">rhae.py — open scorer</a>
-          <a href="https://github.com/arjmandi/assay-verify/blob/main/evidence/arcagi/baselines.json">baselines.json</a>
+          <a href="https://arcprize.org/scorecards/702ccd4f-df1f-4118-bc8b-d79d3f4a1a32" data-gc="scorecard-replay" target="_blank" rel="noopener">Scorecard 702ccd4f</a>
+          <a href="https://github.com/arjmandi/assay-verify/blob/main/evidence/arcagi/rhae.py" data-gc="scorer-rhae" target="_blank" rel="noopener">rhae.py — open scorer</a>
+          <a href="https://github.com/arjmandi/assay-verify/blob/main/evidence/arcagi/baselines.json" data-gc="scorer-baselines" target="_blank" rel="noopener">baselines.json</a>
           <span style="color: var(--ink-mute); font-size: var(--fs-micro);">scorer reproduces 25/25 published game scores, worst error 0.000000</span>
         </div>
       </div>
@@ -680,15 +741,15 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
           </div>
 
           <div class="dl">
-            <a href="https://github.com/arjmandi/assay-verify/raw/main/evidence/arcagi/journal-dc22.jsonl.gz">
+            <a href="https://github.com/arjmandi/assay-verify/raw/main/evidence/arcagi/journal-dc22.jsonl.gz" data-gc="journal-download" target="_blank" rel="noopener">
               <span>Sample journal — one full ARC run, hash-chained<span class="dl__sub">journal-dc22.jsonl.gz</span></span>
               <span class="dl__arrow">↓</span>
             </a>
-            <a href="https://github.com/arjmandi/assay-verify">
+            <a href="https://github.com/arjmandi/assay-verify" data-gc="verifier-repo" target="_blank" rel="noopener">
               <span>Standalone audit verifier<span class="dl__sub">recomputes the chain, anchors and integrity verdict</span></span>
               <span class="dl__arrow">↓</span>
             </a>
-            <a href="https://github.com/arjmandi/assay-verify/tree/main/evidence/arcagi">
+            <a href="https://github.com/arjmandi/assay-verify/tree/main/evidence/arcagi" data-gc="scorer-dir" target="_blank" rel="noopener">
               <span>rhae.py + baselines.json — ARC's official scorer<span class="dl__sub">open scorer, validated against 25/25 published scores</span></span>
               <span class="dl__arrow">↓</span>
             </a>
@@ -800,7 +861,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
 
       <div class="split">
         <div class="tl">
-          <details class="tl__item tl__item--lead" open="open">
+          <details class="tl__item tl__item--lead" open="open" data-gc="expand-doesnt-know">
             <summary class="tl__sum">
               <span class="tl__date">FEB 16</span>
               <span class="tl__title">How Someone Can Know That He Doesn't Know</span>
@@ -808,10 +869,10 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
             </summary>
             <div class="tl__body">
               <p class="tl__note">The philosophical companion to the exercised-claim finding. Written in February about the epistemology of uncertainty; in August the harness broke six impossibility proofs by auditing what had never been exercised.</p>
-              <a class="tl__link" href="https://freddiespirit.substack.com/p/how-someone-can-know-that-he-doesnt">Read on Substack →</a>
+              <a class="tl__link" href="https://freddiespirit.substack.com/p/how-someone-can-know-that-he-doesnt" data-gc="post-doesnt-know" target="_blank" rel="noopener">Read on Substack →</a>
             </div>
           </details>
-          <details class="tl__item">
+          <details class="tl__item" data-gc="expand-arc-formulate">
             <summary class="tl__sum">
               <span class="tl__date">MAY 18</span>
               <span class="tl__title">ARC AGI 3: How to formulate?</span>
@@ -819,10 +880,10 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
             </summary>
             <div class="tl__body">
               <p class="tl__note">Timestamped priority on the problem formulation.</p>
-              <a class="tl__link" href="https://freddiespirit.substack.com/p/arc-agi-3-how-to-formulate">Read on Substack →</a>
+              <a class="tl__link" href="https://freddiespirit.substack.com/p/arc-agi-3-how-to-formulate" data-gc="post-arc-formulate" target="_blank" rel="noopener">Read on Substack →</a>
             </div>
           </details>
-          <details class="tl__item">
+          <details class="tl__item" data-gc="expand-why-sensi">
             <summary class="tl__sum">
               <span class="tl__date">MAR 19</span>
               <span class="tl__title">Why I Built Sensi</span>
@@ -830,10 +891,10 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
             </summary>
             <div class="tl__body">
               <p class="tl__note">Lineage, and the negative-results discipline on display.</p>
-              <a class="tl__link" href="https://freddiespirit.substack.com/p/why-i-built-sensi-one-thing-at-a">Read on Substack →</a>
+              <a class="tl__link" href="https://freddiespirit.substack.com/p/why-i-built-sensi-one-thing-at-a" data-gc="post-why-sensi" target="_blank" rel="noopener">Read on Substack →</a>
             </div>
           </details>
-          <details class="tl__item">
+          <details class="tl__item" data-gc="expand-scaling-laws">
             <summary class="tl__sum">
               <span class="tl__date">JAN 28</span>
               <span class="tl__title">Scaling Scaling Laws with Board Games</span>
@@ -841,10 +902,10 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
             </summary>
             <div class="tl__body">
               <p class="tl__note">Test-time-compute foundation.</p>
-              <a class="tl__link" href="https://freddiespirit.substack.com/p/short-summary-of-scaling-scaling">Read on Substack →</a>
+              <a class="tl__link" href="https://freddiespirit.substack.com/p/short-summary-of-scaling-scaling" data-gc="post-scaling-laws" target="_blank" rel="noopener">Read on Substack →</a>
             </div>
           </details>
-          <details class="tl__item">
+          <details class="tl__item" data-gc="expand-student-exam">
             <summary class="tl__sum">
               <span class="tl__date">JAN 23</span>
               <span class="tl__title">The Student Who Can Study During the Exam</span>
@@ -852,7 +913,7 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
             </summary>
             <div class="tl__body">
               <p class="tl__note">Test-time-compute foundation.</p>
-              <a class="tl__link" href="https://freddiespirit.substack.com/p/the-student-who-can-study-during">Read on Substack →</a>
+              <a class="tl__link" href="https://freddiespirit.substack.com/p/the-student-who-can-study-during" data-gc="post-student-exam" target="_blank" rel="noopener">Read on Substack →</a>
             </div>
           </details>
         </div>
@@ -919,18 +980,18 @@ a:hover { color: var(--accent-deep); border-bottom-color: var(--accent-deep); }
       <div class="split">
         <div>
           <h2 class="h2" style="font-weight: 300;">by Mohsen Arjmandi</h2>
-          <p style="margin: var(--s5) 0 var(--s7); font-size: var(--fs-lede); color: var(--dark-body); max-width: 56ch; line-height: var(--lh-body);">Independent researcher. Builds agent instruments where the referee, not the agent, decides what counts as knowledge — and where the record is the product. <a href="https://freddiespirit.com" style="color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4); white-space: nowrap;">Other works</a></p>
+          <p style="margin: var(--s5) 0 var(--s7); font-size: var(--fs-lede); color: var(--dark-body); max-width: 56ch; line-height: var(--lh-body);">Independent researcher. Builds agent instruments where the referee, not the agent, decides what counts as knowledge — and where the record is the product. <a href="https://freddiespirit.com" data-gc="other-works" target="_blank" rel="noopener" style="color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4); white-space: nowrap;">Other works</a></p>
 
           <div class="btns">
-            <a class="btn btn--solid" href="mailto:mohsen.arjmandi@gmail.com">Email</a>
-            <a class="btn btn--ghost" href="https://x.com/freddie_spirit">X / @</a>
-            <a class="btn btn--ghost" href="https://freddiespirit.substack.com/">Substack</a>
+            <a class="btn btn--solid" href="mailto:mohsen.arjmandi@gmail.com" data-gc="contact-email">Email</a>
+            <a class="btn btn--ghost" href="https://x.com/freddie_spirit" data-gc="social-x" target="_blank" rel="noopener">X / @</a>
+            <a class="btn btn--ghost" href="https://freddiespirit.substack.com/" data-gc="social-substack" target="_blank" rel="noopener">Substack</a>
           </div>
         </div>
         <div style="border: 1px solid var(--dark-rule); background: var(--dark-sunk); padding: var(--s5);">
           <span class="eyebrow eyebrow--accent" style="display: block; margin-bottom: var(--s4);">For labs &amp; safety institutes</span>
           <p style="margin: 0 0 var(--s5); font-size: var(--fs-base); color: var(--dark-body); line-height: var(--lh-body);">Reasoning, test-time learning, verified autonomy. I build agents that can prove what they did.</p>
-          <a href="mailto:mohsen.arjmandi@gmail.com?subject=ASSAY%20research%20access" style="font-size: var(--fs-sm); color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4);">Request access →</a>
+          <a href="mailto:mohsen.arjmandi@gmail.com?subject=ASSAY%20research%20access" data-gc="request-access" style="font-size: var(--fs-sm); color: var(--accent-lift); border-bottom-color: rgba(148,170,211,0.4);">Request access →</a>
         </div>
       </div>
       <div class="foot">
